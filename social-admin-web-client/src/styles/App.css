@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap');
+@import "Dashboard.css";
+@import "Landing.css";
+@import "Menu.css";
+@import "Study.css";
+
+* {
+    margin: 0;
+    color: #363636;
+    font-family: 'Raleway', sans-serif;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.fixed-scrollbar {
+    display: block;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+a, button {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    background: linear-gradient(to right, #0f92db, #1bb9ef);
+    border: none;
+    border-radius: 7px;
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    outline: none;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background: linear-gradient(to right, #00A987, #07DDA5);
+}
+
+button:disabled {
+    background: #889da3;
+}

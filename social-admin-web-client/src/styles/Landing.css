@@ -1,0 +1,246 @@
+.landing {
+    /* Grid */
+    display: grid;
+    grid-template-columns: 55vw 45vw;
+    grid-template-rows: 1fr 30px;
+    grid-template-areas:
+        "brand form"
+        "footer footer";
+    height: 100vh;
+}
+
+.brand-panel {
+    /* Grid */
+    grid-area: brand;
+
+    /* Flexbox container */
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.brand-panel > .logo-puzzle-blue {
+    /* Flex */
+    align-self: flex-end;
+
+    /* Image style */;
+    width: 15vw;
+    max-width: 350px;
+    min-width: 188px;
+
+    object-fit: cover;
+    object-position: 50% -20px;
+}
+
+.brand-panel > .logo-main {
+    /* Flex */
+    align-self: center;
+
+    /* Image style */
+    width: 30vw;
+    max-width: 450px;
+    min-width: 242px;
+}
+
+.brand-panel > .logo-puzzle-green {
+    /* Flex */
+    align-self: flex-start;
+
+    /* Image style */
+    width: 20vw;
+    max-width: 400px;
+    min-width: 215px;
+
+    object-fit: cover;
+    object-position: 50% 1px;
+}
+
+.form {
+    /* Grid */
+    grid-area: form;
+
+    /* Flexbox container */
+    display: flex;
+    flex-direction: column;
+
+    /* Style */
+    margin-right: 5vw;
+}
+
+.form-header {
+    align-self: self-end;
+    margin-top: 5vh;
+
+    /* --- Flexbox --- */
+    align-items: center;
+    display: flex;
+}
+
+.back-button {
+    background: linear-gradient(to right, #0f92db, #1bb9ef);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    height: 50px;
+    width: 50px;
+
+    /* --- Position --- */
+    position: absolute;
+    left: 5vw;
+}
+
+.back-button:hover {
+    background: linear-gradient(to right, #00A987, #07DDA5);
+}
+
+.form-header > label {
+    color: #00a682;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.login-signup-section {
+    align-self: self-end;
+    margin-top: 5vh;
+}
+
+.login-button {
+    background: linear-gradient(to top, #0f92db, #1bb9ef);
+    border: #1bb9ef solid 1px;
+    border-radius: 25px 0 0 25px;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    height: 50px;
+    text-transform: uppercase;
+    width: 130px;
+}
+
+.signup-button {
+    background: white;
+    border: #889da3 solid 1px;
+    border-radius: 0 25px 25px 0;
+    color: #889da3;
+    font-weight: 700;
+    font-size: 20px;
+    height: 50px;
+    text-transform: uppercase;
+    width: 130px;
+}
+
+.signup-button:hover {
+    color: white;
+}
+
+.form > form {
+    align-self: center;
+    flex-grow: 1;
+    width: 30vw;
+    max-width: 536px;
+    min-width: 400px;
+
+    /* Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field > label {
+    color: #363636;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 700;
+    height: 40px;
+    text-transform: uppercase;
+}
+
+.form-field > input {
+    border: none;
+    border-bottom: #889da3 solid 1px;
+    color: #889da3;
+    font-size: 22px;
+    height: 40px;
+    outline: 0;
+    width: 100%;
+}
+
+.form-field > select {
+    background: white;
+    border: none;
+    border-bottom: #889da3 solid 1px;
+    color: #889da3;
+    font-size: 22px;
+    height: 40px;
+    outline: 0;
+    width: 100%;
+}
+
+.forgotten-password label {
+    color: #00a682;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form-button {
+    border-radius: 10px;
+    color: white;
+    height: 55px;
+    margin-top: 5vh;
+    width: 260px;
+}
+
+.footer {
+    /* Grid */
+    grid-area: footer;
+
+    /* Flexbox */
+    display: flex;
+    justify-content: center;
+
+    /* Style */
+    align-items: center;
+    background-color: #00a987;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+@media (max-width: 1000px) {
+    .landing {
+        /* Grid */
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100vh 1fr 30px;
+        grid-template-areas:
+        "brand"
+        "form"
+        "footer";
+        grid-row-gap: 40px;
+
+        height: 200vh;
+    }
+
+    .login-signup-section {
+        position: absolute;
+        top: 0;
+    }
+
+    .form-header {
+        margin-bottom: 50px;
+    }
+
+    .form-button {
+        margin-bottom: 50px;
+    }
+}

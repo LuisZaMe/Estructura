@@ -1,0 +1,7 @@
+<svg id="MENU_OPTION" data-name="MENU OPTION" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+  <rect id="Rectangle_4382" data-name="Rectangle 4382" width="50" height="50" rx="5" fill="#fff" opacity="0.0"/>
+  <g id="Group_7443" data-name="Group 7443">
+    <path id="Path_7537" data-name="Path 7537" d="M490.825,164a6.5,6.5,0,0,1-.66-.514q-3.65-3.634-7.288-7.284a2.088,2.088,0,0,1-.17-.207c-.729.484-1.384.982-2.093,1.382A12.475,12.475,0,0,1,462.3,149.2c-.12-.541-.168-1.1-.25-1.646-.013-.085-.034-.168-.051-.252v-1.641c.075-.5.129-1,.229-1.5a12.306,12.306,0,0,1,5.907-8.406,11.692,11.692,0,0,1,6.934-1.733,11.945,11.945,0,0,1,10.436,6.64c2.5,4.819,1.928,9.475-1.384,13.784l-.184.242a1.957,1.957,0,0,1,.261.189q3.72,3.715,7.436,7.435a.938.938,0,0,1-.3,1.645c-.017.008-.028.027-.041.04Zm-16.333-6.87a10.626,10.626,0,1,0-10.617-10.657A10.658,10.658,0,0,0,474.492,157.13Z" transform="translate(-452.002 -124)" fill="#fff"/>
+    <path id="Icon_feather-check" data-name="Icon feather-check" d="M16.182,9l-7,7L6,12.818" transform="translate(12 9.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+  </g>
+</svg>

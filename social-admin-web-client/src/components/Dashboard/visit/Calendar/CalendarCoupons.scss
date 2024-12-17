@@ -1,0 +1,25 @@
+.calendar {
+    position: relative;
+    z-index: 1;
+    .admin-schedule-calendar {
+        .month {
+            padding-bottom: 0!important;
+        }
+        .container-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            .icon-arrow {
+                p {
+                    font-size: 20px;
+                    font-weight: bold;
+                    background: #0085CA;
+                    padding: 0px 9px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    color: white;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,128 @@
+.menu {
+    /* Grid */
+    grid-area: menu;
+
+    background-color: #363636;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    transition: width 0.025s;
+    width: 140px;
+    z-index: 6;
+
+    /* Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    ;
+}
+
+.menu:hover {
+    overflow: visible;
+    width: 260px;
+}
+
+.menu-top {
+    /* Flexbox */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 15%;
+    margin-bottom: 40px;
+    width: 140px;
+}
+
+.menu-top button {
+    background: linear-gradient(to right, #0f92db, #1bb9ef);
+    border: none;
+    border-radius: 25px;
+    color: black;
+    font-weight: 700;
+    font-size: 20px;
+    height: 50px;
+    width: 50px;
+}
+
+.menu-top button:hover {
+    background: linear-gradient(to right, #00A987, #07DDA5);
+}
+
+.menu-list {
+    /* Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    height: 50%;
+    list-style: none;
+    padding: 0;
+}
+
+.menu-list>li>a {
+    /* Flexbox */
+    display: flex;
+    align-items: center;
+
+    background-color: #3f3f3f;
+    border-radius: 5px;
+    margin-left: 45px;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: width 0.025s;
+    width: 50px;
+}
+
+.menu-list>li {
+    margin-bottom: 12px;
+}
+
+.menu-list>li>a:hover {
+    background-color: white;
+}
+
+.menu-list>li.active>a {
+    background-color: white;
+}
+
+.menu:hover>nav>ul>li>a {
+    width: 205px;
+}
+
+.menu-list>li>a:hover>img {
+    filter: invert(20%) sepia(7%) saturate(0%) hue-rotate(172deg) brightness(101%) contrast(97%);
+}
+
+.menu-list>li.active>a>img {
+    filter: invert(43%) sepia(96%) saturate(655%) hue-rotate(127deg) brightness(91%) contrast(104%);
+}
+
+.menu-list>li>a>span {
+    color: white;
+    display: none;
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: visibility 0.2s ease-out;
+    visibility: hidden;
+}
+
+.menu-list>li>a:hover>span {
+    color: #363636;
+    visibility: hidden;
+}
+
+.menu-list>li.active>a>span {
+    color: #363636;
+}
+
+.menu:hover>nav>ul>li>a>span {
+    display: revert;
+    visibility: visible;
+}
+
+.hide-item {
+    display: none;
+    width: 0px;
+    height: 0px;
+}
