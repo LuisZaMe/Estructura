@@ -94,7 +94,7 @@ const AnalystList = () => {
     const renderAnalysts = analysts.map(analyst => {
         return (
             <div key={analyst.id} className={"table-row"}>
-                <label className={"table-cell"}>{analyst.name}</label>
+                <label className={"table-cell"}>{`${analyst?.name || ""} ${analyst?.lastname || ""}`.trim()}</label>
                 <label className={"table-cell"}>{analyst.phone}</label>
                 <label className={"table-cell"}>{analyst.email}</label>
                 <ActionDropdown

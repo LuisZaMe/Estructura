@@ -83,7 +83,7 @@ const Study = () => {
     const candidateOptions = candidates.map(candidate => {
         return {
             id: candidate.id,
-            value: candidate.name
+            value: `${candidate.name} ${candidate.lastname || ""}`.trim()
         }
     })
 
@@ -94,7 +94,7 @@ const Study = () => {
     const interviewerOptions = interviewers.map(interviewer => {
         return {
             id: interviewer.id,
-            value: interviewer.name
+            value: `${interviewer.name} ${interviewer.lastname}`
         }
     })
 
@@ -105,7 +105,7 @@ const Study = () => {
     const analystOptions = analysts.map(analyst => {
         return {
             id: analyst.id,
-            value: analyst.name
+             value: `${analyst.name} ${analyst.lastname}`
         }
     })
 
@@ -387,11 +387,13 @@ const Study = () => {
                         <div className={"main-section select-candidate shadow"}>
                             <h2 className={"study-header select-candidate"}>Seleccionar candidato</h2>
                             <div className={"study-dropdown select-candidate"}>
-                                <Select options={candidateOptions}
-                                    selectedOption={candidate ? candidate.name : null}
+                                <Select 
+                                    options={candidateOptions}
+                                    selectedOption={candidate ? `${candidate.name} ${candidate.lastname || ""}`.trim() : null}
                                     onChange={handleCandidate}
                                     page={candidatePage}
-                                    setPage={setCandidatePage} />
+                                    setPage={setCandidatePage} 
+                                />
                             </div>
                             <button disabled={!candidate} className={"study-button select-candidate"}
                                 onClick={() => setProgress(2)}>Siguiente
@@ -458,11 +460,10 @@ const Study = () => {
                     <div className={"main-section preload-study shadow"}>
                         <label className={"preload-study-header"}>Se han precargado los datos del candidato, favor de
                             seleccionar un entrevistador:</label>
-                        <div className={"preload-study-candidate"}>
-                            <label className={"preload-study-label"}>Candidato</label>
-                            <span
-                                className={"preload-study-span"}>{candidate.name}</span>
-                        </div>
+                            <div className={"preload-study-candidate"}>
+                                <label className={"preload-study-label"}>Candidato</label>
+                                <span className={"preload-study-span"}> {candidate ? `${candidate.name} ${candidate.lastname || ""}`.trim() : ""}</span>
+                            </div>
                         <div className={"preload-study-study"}>
                             <label className={"preload-study-label"}>Estudio</label>
                             <span className={"preload-study-span"}>{study === 1 ? "Socioeconomico" : "Laboral"}</span>
@@ -480,21 +481,25 @@ const Study = () => {
                                 <>
                                     <label className={"preload-study-label"}>Seleccionar entrevistador</label>
                                     <div className={"study-dropdown select-interviewer"}>
-                                        <Select options={interviewerOptions}
-                                            selectedOption={interviewer ? interviewer.name : null}
-                                            onChange={handleInterviewer}
-                                            page={interviewerPage}
-                                            setPage={setInterviewerPage} />
+                                    <Select 
+                                    options={interviewerOptions}
+                                    selectedOption={interviewer ? `${interviewer.name} ${interviewer.lastname}` : null}
+                                    onChange={handleInterviewer}
+                                    page={interviewerPage}
+                                    setPage={setInterviewerPage}
+                                    />
                                     </div>
                                 </> :
                                 <>
                                     <label className={"preload-study-label"}>Seleccionar analista</label>
                                     <div className={"study-dropdown select-interviewer"}>
-                                        <Select options={analystOptions}
-                                            selectedOption={analyst ? analyst.name : null}
-                                            onChange={handleAnalyst}
-                                            page={analystPage}
-                                            setPage={setAnalystPage} />
+                                    <Select 
+                                    options={analystOptions}
+                                    selectedOption={analyst ? `${analyst.name} ${analyst.lastname}` : null}
+                                    onChange={handleAnalyst}
+                                    page={analystPage}
+                                    setPage={setAnalystPage}
+                                    />
                                     </div>
                                 </>
                             }

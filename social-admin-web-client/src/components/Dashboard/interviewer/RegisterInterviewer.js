@@ -19,6 +19,7 @@ const RegisterInterviewer = () => {
 	const show = useSelector(state => state.registerInterviewer);
 
 	const [name, setName] = useState("");
+	const [lastname, setLastname] = useState("");
 	const [phone, setPhone] = useState("");
 	const [email, setEmail] = useState("");
 
@@ -31,7 +32,7 @@ const RegisterInterviewer = () => {
 		event.preventDefault()
 
 		try {
-			const interviewer = new Account(email, name, "", Account.INTERVIEWER, phone, null, parseInt(state), parseInt(city))
+			const interviewer = new Account(email, name, lastname, Account.INTERVIEWER, phone, null, parseInt(state), parseInt(city))
 
 			const response = await AccountService.create(interviewer)
 			dispatch(setInterviewerId(response.data.response.id))
@@ -94,9 +95,14 @@ const RegisterInterviewer = () => {
 				<h2>Registro de Entrevistador</h2>
 				<form className={"form-section"} onSubmit={onSubmit}>
 					<div className={"form-item"}>
-						<label htmlFor={"name"}>Nombre</label>
-						<input type={"text"} name={"name"} placeholder={"Agregar nombre"} required value={name}
+						<label htmlFor={"name"}>Nombre(s)</label>
+						<input type={"text"} name={"name"} placeholder={"Agregar nombre(s)"} required value={name}
 							onChange={event => setName(event.target.value)} />
+					</div>
+					<div className={"form-item"}>
+						<label htmlFor={"lastname"}>Apellido(s)</label>
+						<input type={"text"} name={"lastname"} placeholder={"Agregar apellido(s)"} required value={lastname}
+							onChange={event => setLastname(event.target.value)} />
 					</div>
 					<div className={"form-item"}>
 						<label htmlFor={"phone"}>Telefono</label>

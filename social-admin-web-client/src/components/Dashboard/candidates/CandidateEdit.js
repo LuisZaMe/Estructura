@@ -60,7 +60,7 @@ const CandidateEdit = () => {
                     <div className={"candidate-view"}>
                         <div>
                             <div className={"candidate-section-item"}>
-                                <label className={"property"}>Nombre del candidato</label>
+                                <label className={"property"}>Nombre(s) del candidato</label>
                                 <input className={"candidate-section-input"} value={candidate ? candidate.name : ""}
                                        onChange={event => setCandidate({...candidate, name: event.target.value})}/>
                             </div>
@@ -86,6 +86,11 @@ const CandidateEdit = () => {
                             </div>
                         </div>
                         <div>
+                        <div className={"candidate-section-item"}>
+                                <label className={"property"}>Apellido(s) del candidato</label>
+                                <input className={"candidate-section-input"} value={candidate ? candidate.lastname : ""}
+                                       onChange={event => setCandidate({...candidate, lastname: event.target.value})}/>
+                            </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Estado</label>
                                 <input className={"candidate-section-input"}
