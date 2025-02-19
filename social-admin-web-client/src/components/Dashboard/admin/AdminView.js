@@ -44,7 +44,7 @@ const AdminView = () => {
                     <div className={"admin-header"}>
                         <div className={"admin-name"}>
                             <label className={"admin-name-title"}>Nombre del administrador</label>
-                            <label className={"admin-name-value"}>{admin ? admin.name : null}</label>
+                            <label className={"admin-name-value"}>{admin ? `${admin.name} ${admin.lastname}` : ''}</label>
                         </div>
                         <button className={"edit-admin"} onClick={onClickEdit}>
                             <img src={"/images/actions-dropdown/edit.svg"} alt={""}/>

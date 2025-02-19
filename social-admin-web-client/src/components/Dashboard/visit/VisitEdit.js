@@ -148,8 +148,8 @@ const VisitEdit = (props) => {
             <div className={"top-section"}>
                 <div className={"candidate-header"}>
                     <div className={"company-name"}>
-                        <label className={"company-name-title"}>Nombre del cliente</label>
-                        <input className={"client-section-input"} value={visit ? visit.study.candidate.name : ""} disabled/>
+                        <label className={"company-name-title"}>Nombre Cliente/Empresa</label>
+                        <input className={"client-section-input"} value={visit ? visit.study.candidate.client.companyInformation.companyName : ""} disabled/>
                     </div>
                     <button className={"edit-candidate"} onClick={onClickView}>
                         <img src={"/images/actions-dropdown/edit.svg"} alt={""}/>
@@ -161,12 +161,12 @@ const VisitEdit = (props) => {
                 <div className={"candidate-view"} style={{overflowY: "auto"}}>
                     <div>
                         <div className={"candidate-section-item"}>
-                            <label className={"property"}>Nombre del cliente</label>
-                            <input className={"candidate-section-input"} style={{background : "transparent"}} value={visit ? visit.study.candidate.client.name : ""} disabled/>
+                            <label className={"property"}>Nombre de Responable</label>
+                            <input className={"candidate-section-input"} style={{background : "transparent"}} value={visit ? `${visit.study.candidate.client.name} ${visit.study.candidate.client.lastname}` : ""}  disabled/>
                         </div>
                         <div className={"candidate-section-item"}>
                             <label className={"property"}>Nombre del entrevistador</label>
-                            <input className={"candidate-section-input"} style={{background : "transparent"}} value={visit ? visit.study.interviewer.name : null} disabled/>
+                            <input className={"candidate-section-input"} style={{background : "transparent"}} value={visit ? `${visit.study.interviewer.name} ${visit.study.interviewer.lastname}` : null} disabled/>
                         </div>
                         <div className={"candidate-section-item"}>
                             <label className={"property"}>Fecha de visita</label>
@@ -188,7 +188,7 @@ const VisitEdit = (props) => {
                         <div className={"candidate-section-item"}>
                             <label className={"property"}>Candidato</label>
                             <input className={"candidate-section-input"} style={{background : "transparent"}}
-                                  value={visit ? visit.study.candidate.name : null} disabled/>
+                                  value={visit ? `${visit.study.candidate.name} ${visit.study.candidate.lastname}` : null} disabled/>
                         </div>
                         <div className={"candidate-section-item"}>
                             <label className={"property"}>Color</label>

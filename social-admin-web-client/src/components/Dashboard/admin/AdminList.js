@@ -104,7 +104,7 @@ const AdminList = () => {
     const renderAdmins = admins.map(admin => {
         return (
             <div key={admin.id} className={"table-row"}>
-                <label className={"table-cell"}>{admin.name}</label>
+                <label className={"table-cell"}>{admin ? `${admin.name} ${admin.lastname}` : ''}</label>
                 <label className={"table-cell"}>{admin.phone}</label>
                 <label className={"table-cell"}>{admin.email}</label>
                 <label className={"table-cell"}><RenderRole roleId={admin.roleId} /></label>

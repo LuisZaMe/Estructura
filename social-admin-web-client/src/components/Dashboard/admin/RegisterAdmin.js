@@ -19,6 +19,7 @@ const RegisterAdmin = () => {
     const show = useSelector(state => state.registerAdmin)
 
     const [name, setName] = useState("")
+    const [lastname, setLastname] = useState("")
     const [phone, setPhone] = useState("")
     const [email, setEmail] = useState("")
     const [isSuperAdmin, setIsSuperAdmin] = useState(false)
@@ -32,7 +33,7 @@ const RegisterAdmin = () => {
 
             const role = isSuperAdmin ? Account.SUPER_ADMINISTRADOR : Account.ADMIN;
 
-            const admin = new Account(email, name, "", role, phone, null)
+            const admin = new Account(email, name, lastname, role, phone, null)
 
             const response = await AccountService.create(admin)
             dispatch(setAdminId(response.data.response.id))
@@ -77,9 +78,14 @@ const RegisterAdmin = () => {
                 <form className={"form-section"} onSubmit={onSubmit}>
                     <h3 className={"form-subsection-header"}>Datos Principales</h3>
                     <div className={"form-item"}>
-                        <label htmlFor={"name"}>Nombre*</label>
-                        <input type={"text"} name={"name"} placeholder={"Agregar nombre"} required={true} value={name}
+                        <label htmlFor={"name"}>Nombre(s)*</label>
+                        <input type={"text"} name={"name"} placeholder={"Agregar nombre(s)"} required={true} value={name}
                                onChange={event => setName(event.target.value)}/>
+                    </div>
+                    <div className={"form-item"}>
+                        <label htmlFor={"lastname"}>Apellido(s)*</label>
+                        <input type={"text"} name={"lastname"} placeholder={"Agregar apellido(s)"} required={true} value={lastname}
+                               onChange={event => setLastname(event.target.value)}/>
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"phone"}>Telefono*</label>

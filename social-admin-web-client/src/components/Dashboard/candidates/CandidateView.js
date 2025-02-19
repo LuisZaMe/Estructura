@@ -56,7 +56,7 @@ const CandidateView = () => {
                     <div className={"candidate-view"}>
                         <div>
                             <div className={"candidate-section-item"}>
-                                <label className={"property"}>Nombre del candidato</label>
+                                <label className={"property"}>Nombre(s) del candidato</label>
                                 <label className={"value"}>{candidate ? candidate.name : null}</label>
                             </div>
                             <div className={"candidate-section-item"}>
@@ -77,6 +77,10 @@ const CandidateView = () => {
                             </div>
                         </div>
                         <div>
+                        <div className={"candidate-section-item"}>
+                                <label className={"property"}>Apellido(s) del candidato</label>
+                                <label className={"value"}>{candidate ? candidate.lastname : null}</label>
+                            </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Estado</label>
                                 <label

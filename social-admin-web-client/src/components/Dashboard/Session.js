@@ -40,7 +40,7 @@ const Session = () => {
             <div className={"session-dropdown"} ref={ref}>
                 <div className={"session-user"} onClick={() => setExpanded(!expanded)}>
                     <img src={"/images/icon-user.png"} alt={"User icon"}/>
-                    <span>{user.name}</span>
+                    <span>{`${user.name} ${user.lastname || ""}`.trim()}</span>
                     <img src={"/images/icon-arrow-down.png"} alt={"dropdown icon"}/>
                 </div>
                 <div className={`session-actions ${expanded ? "expanded" : ""}`}>

@@ -91,7 +91,7 @@ const InterviewerView = () => {
 					<div className={"interviewer-header"}>
 						<div className={"interviewer-name"}>
 							<label className={"interviewer-name-title"}>Nombre del entrevistador</label>
-							<label className={"interviewer-name-value"}>{interviewer ? interviewer.name : null}</label>
+							<label className={"interviewer-name-value"}>{`${interviewer?.name || ""} ${interviewer?.lastname || ""}`.trim()}</label>
 						</div>
 						<button className={"edit-interviewer"} onClick={onClickEdit}>
 							<img src={"/images/actions-dropdown/edit.svg"} alt={""} />

@@ -49,7 +49,9 @@ const AnalystView = () => {
                     <div className={"analyst-header"}>
                         <div className={"analyst-name"}>
                             <label className={"analyst-name-title"}>Nombre del analista</label>
-                            <label className={"analyst-name-value"}>{analyst ? analyst.name : null}</label>
+                            <label className={"analyst-name-value"}>
+                                {analyst ? `${analyst.name} ${analyst.lastname || ""}`.trim() : null}
+                            </label>
                         </div>
                         <button className={"edit-analyst"} onClick={onClickEdit}>
                             <img src={"/images/actions-dropdown/edit.svg"} alt={""}/>

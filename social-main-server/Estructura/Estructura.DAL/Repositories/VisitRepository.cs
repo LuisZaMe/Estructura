@@ -172,7 +172,7 @@ namespace Estructura.DAL.Repositories
                             ci.*,
                             sta.*,
                             m.Id,
-                            sv.id as ScheduledVisitsId
+                            sv.StudyId as ScheduledVisitsId
                         FROM ScheduledVisits sv
                         LEFT JOIN Cities ci
                         ON 
@@ -194,7 +194,7 @@ namespace Estructura.DAL.Repositories
                         {cityFilter}
                         {stateFilter}
                         {visitStatusFilter}
-                        ORDER BY sv.id DESC
+                        ORDER BY sv.StudyId DESC
 						OFFSET {currentPage * offset} ROWS 
                         FETCH NEXT {offset} ROWS ONLY
                     ";

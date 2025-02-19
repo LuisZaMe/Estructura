@@ -79,8 +79,8 @@ const VisitView = (props) => {
                 <div className={"top-section"}>
                     <div className={"candidate-header"}>
                         <div className={"company-name"}>
-                            <label className={"company-name-title"}>Nombre del cliente</label>
-                            <label className={"company-name-value"}>{visit ? visit.study.candidate.name : ""}</label>
+                            <label className={"company-name-title"}>Nombre Cliente/Empresa</label>
+                            <label className={"company-name-value"}>{visit ? visit.study.candidate.client.companyInformation.companyName : ""}</label>
                         </div>
                         <button className={"edit-candidate"} onClick={onClickEdit}>
                             <img src={"/images/actions-dropdown/edit.svg"} alt={""}/>
@@ -92,12 +92,12 @@ const VisitView = (props) => {
                     <div className={"candidate-view"} style={{overflowY: "auto"}}>
                         <div>
                             <div className={"candidate-section-item"}>
-                                <label className={"property"}>Cliente</label>
-                                <label className={"value"}>{visit ? visit.study.candidate.client.name : null}</label>
+                                <label className={"property"}>Responsable</label>
+                                <label className={"value"}>{visit ? `${visit.study.candidate.client.name} ${visit.study.candidate.client.lastname}` : null}</label>
                             </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Entrevistador</label>
-                                <label className={"value"}>{visit ? visit.study.interviewer.name : null}</label>
+                                <label className={"value"}>{visit ? `${visit.study.interviewer.name} ${visit.study.interviewer.lastname}` : null}</label>
                             </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Fecha de visita</label>
@@ -120,7 +120,7 @@ const VisitView = (props) => {
                         <div>
                         <div className={"candidate-section-item"}>
                                 <label className={"property"}>Candidato</label>
-                                <label className={"value"}>{visit ? visit.study.candidate.name : null}</label>
+                                <label className={"value"}>{visit && visit.study && visit.study.candidate ? `${visit.study.candidate.name} ${visit.study.candidate.lastname}` : null}</label>
                             </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Color</label>

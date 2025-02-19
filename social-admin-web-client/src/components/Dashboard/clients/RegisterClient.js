@@ -21,6 +21,7 @@ const RegisterClient = () => {
     const [companyName, setCompanyName] = useState("")
     const [companyPhone, setCompanyPhone] = useState("")
     const [contactName, setContactName] = useState("")
+    const [contactLastname, setContactLastname] = useState("")
     const [contactPhone, setContactPhone] = useState("")
     const [email, setEmail] = useState("")
     const [corporateName, setCorporateName] = useState("")
@@ -34,7 +35,7 @@ const RegisterClient = () => {
 
         try {
             const company = new Company(companyName, companyPhone, legalAddress, paymentMethod, corporateName, taxId, taxRegime)
-            const account = new Account(email, contactName, "", Account.CLIENT, contactPhone, company)
+            const account = new Account(email, contactName, contactLastname, Account.CLIENT, contactPhone, company)
 
             const response = await AccountService.create(account)
             dispatch(setClientId(response.data.response.id))
@@ -68,9 +69,14 @@ const RegisterClient = () => {
                                value={companyPhone} onChange={event => setCompanyPhone(event.target.value)}/>
                     </div>
                     <div className={"form-item"}>
-                        <label htmlFor={"contact-name"}>Nombre responsable*</label>
+                        <label htmlFor={"contact-name"}>Nombre(s) responsable*</label>
                         <input type={"text"} name={"contact-name"} placeholder={"Agregar nombre"} required={true}
                                value={contactName} onChange={event => setContactName(event.target.value)}/>
+                    </div>
+                    <div className={"form-item"}>
+                        <label htmlFor={"contact-lastname"}>Apellido(s) responsable*</label>
+                        <input type={"text"} name={"contact-lastname"} placeholder={"Agregar nombre"} required={true}
+                               value={contactLastname} onChange={event => setContactLastname(event.target.value)}/>
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"contact-phone"}>Telefono responsable*</label>

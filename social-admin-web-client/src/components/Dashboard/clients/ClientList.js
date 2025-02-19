@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 // Actions
-import { removeClientId, setClientId, showRegisterClient } from "../../../actions";
+import { 
+    removeClientId, 
+    setClientId, 
+    showRegisterClient 
+} from "../../../actions";
 
 // Components
 import RegisterClient from "./RegisterClient";
@@ -24,16 +28,17 @@ const ClientList = () => {
     const client = useSelector(state => state.client)
 
     const [clients, setClients] = useState([])
+    const [filteredClients, setFilteredClients] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
     const [page, setPage] = useState(0)
     const [pages, setPages] = useState(0)
     const [showDeleteClient, setShowDeleteClient] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     const getClients = async () => {
         setIsLoading(true);
         try {
-            const response = await AccountService.getAccounts(Account.CLIENT, searchTerm, page)
+            const response = await AccountService.getAccounts(Account.CLIENT, "", page)
             setClients(response.data.response)
             setIsLoading(false);
         } catch (error) {
@@ -54,7 +59,16 @@ const ClientList = () => {
     useEffect(() => {
         getClients()
         getPages()
-    }, [])
+    }, [page])    
+
+    useEffect(() => {
+        const filtered = clients.filter(client => {
+            return client.companyInformation?.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                `${client.name} ${client.lastname}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                client.email.toLowerCase().includes(searchTerm.toLowerCase())
+        })
+        setFilteredClients(filtered)
+    }, [searchTerm, clients])
 
     const handleDelete = () => {
         dispatch(removeClientId())
@@ -76,12 +90,12 @@ const ClientList = () => {
         setShowDeleteClient(true)
     }
 
-    const renderClients = clients.map(client => {
+    const renderClients = filteredClients.map(client => {
         return (
             <div key={client.id} className={"table-row"}>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.companyName : ""}</label>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.companyPhone : ""}</label>
-                <label className={"table-cell"}>{client.name}</label>
+                <label className={"table-cell"}>{`${client.name || ''} ${client.lastname || ''}`.trim()}</label>
                 <label className={"table-cell"}>{client.phone}</label>
                 <label className={"table-cell"}>{client.email}</label>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.razonSocial : ""}</label>

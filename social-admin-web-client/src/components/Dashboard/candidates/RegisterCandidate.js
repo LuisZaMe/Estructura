@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -17,6 +17,8 @@ import AccountService from "../../../services/AccountService";
 import CandidateService from "../../../services/CandidateService";
 import LocationService from "../../../services/LocationService";
 
+import "./RegisterCandidate.css"; 
+
 const RegisterCandidate = () => {
     const dispatch = useDispatch()
     const history = useHistory()
@@ -26,6 +28,7 @@ const RegisterCandidate = () => {
     const clientPreloadedId = useSelector(state => state.client)
 
     const [name, setName] = useState("")
+    const [lastname, setLastname] = useState("")
     const [phone, setPhone] = useState("")
     const [email, setEmail] = useState("")
     const [curp, setCurp] = useState("")
@@ -39,6 +42,17 @@ const RegisterCandidate = () => {
     const [page, setPage] = useState(0)
     const [states, setStates] = useState([])
     const [cities, setCities] = useState([])
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const timeoutRef = useRef()
+
+    // Cleanup effect
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current)
+            }
+        }
+    }, [])
 
     // Request clients
     const getClients = async () => {
@@ -110,27 +124,31 @@ const RegisterCandidate = () => {
         event.preventDefault()
 
         try {
-            const candidate = new Candidate(name, phone, email, curp, nss, address, position, {id: state}, {id: city}, client)
+            const candidate = new Candidate(name, lastname, phone, email, curp, nss, address, position, {id: state}, {id: city}, client)
 
             const response = await CandidateService.create(candidate)
             dispatch(setCandidateId(response.data.response.id))
 
-            disableFlagsAndClose()
-            history.push("/dashboard/candidatos/ver")
+            // Mostrar mensaje de éxito
+            setShowSuccessMessage(true)
+            
+            // Programar cierre y navegación
+            timeoutRef.current = setTimeout(() => {
+                disableFlagsAndClose()
+                history.push("/dashboard/candidatos/ver")
+            }, 3000)
+
         } catch (error) {
             console.log(error)
         }
     }
 
     const disableFlagsAndClose = () => {
-        // Remove flag of registerFromClient
         dispatch(removeClientId())
         if (invokedFromClient) {
             dispatch(registerCandidateFromClient())
             invokedFromClient = false
         }
-
-        // Close form
         dispatch(hideRegisterCandidate())
     }
 
@@ -162,15 +180,26 @@ const RegisterCandidate = () => {
     return (
         <div className={showHideModal}>
             <div className={"form-register-candidate"}>
+                {showSuccessMessage && (
+                    <div className="confirmation-message">
+                        ¡Procesando Candidato!
+                    </div>
+                )}
+                
                 <div className={"close-modal"}>
                     <img src={"/images/icon-close.png"} alt={""} onClick={disableFlagsAndClose}/>
                 </div>
                 <h2>Registro de candidato</h2>
                 <form className={"form-section no-scrollbar"} onSubmit={onSubmit}>
                     <div className={"form-item"}>
-                        <label htmlFor={"name"}>Nombre del candidato</label>
-                        <input type={"text"} name={"name"} placeholder={"Agregar candidato"} required value={name}
+                        <label htmlFor={"name"}>Nombre(s) del candidato</label>
+                        <input type={"text"} name={"name"} placeholder={"Nombre(s) candidato"} required value={name}
                                onChange={event => setName(event.target.value)}/>
+                    </div>
+                    <div className={"form-item"}>
+                        <label htmlFor={"lastname"}>Nombre del candidato</label>
+                        <input type={"text"} name={"lastname"} placeholder={"Agregar candidato"} required value={lastname}
+                               onChange={event => setLastname(event.target.value)}/>
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"client"}>Nombre del cliente</label>
