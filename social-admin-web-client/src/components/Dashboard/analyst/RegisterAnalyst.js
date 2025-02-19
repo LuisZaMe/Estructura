@@ -18,6 +18,7 @@ const RegisterAnalyst = () => {
     const show = useSelector(state => state.registerAnalyst)
 
     const [name, setName] = useState("")
+    const [lastname, setLastname] = useState("")
     const [phone, setPhone] = useState("")
     const [email, setEmail] = useState("")
 
@@ -25,7 +26,7 @@ const RegisterAnalyst = () => {
         event.preventDefault()
 
         try {
-            const analyst = new Account(email, name, "", Account.ANALYST, phone, null)
+            const analyst = new Account(email, name, lastname, Account.ANALYST, phone, null)
 
             const response = await AccountService.create(analyst)
             dispatch(setAnalystId(response.data.response.id))
@@ -49,9 +50,14 @@ const RegisterAnalyst = () => {
                 <form className={"form-section"} onSubmit={onSubmit}>
                     <h3 className={"form-subsection-header"}>Datos principales</h3>
                     <div className={"form-item"}>
-                        <label htmlFor={"name"}>Nombre*</label>
-                        <input type={"text"} name={"name"} placeholder={"Agregar nombre"} required value={name}
+                        <label htmlFor={"name"}>Nombre(s)*</label>
+                        <input type={"text"} name={"name"} placeholder={"Agregar nombre(s)"} required value={name}
                                onChange={event => setName(event.target.value)}/>
+                    </div>
+                    <div className={"form-item"}>
+                        <label htmlFor={"lastname"}>Apellido(s)*</label>
+                        <input type={"text"} name={"lastname"} placeholder={"Agregar apellido(s)"} required value={lastname}
+                               onChange={event => setLastname(event.target.value)}/>
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"phone"}>Telefono*</label>

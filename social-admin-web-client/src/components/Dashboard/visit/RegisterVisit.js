@@ -145,24 +145,27 @@ export const RegisterVisit = () => {
                         }}>
                             <option className='option-selected' value={0} selected hidden> {"Seleccionar estudio"}</option>
                             {
-                                studies &&
-                                studies.map(ele => {
-                                    return <option value={ele.id}> {serviceType[_.get(ele,'serviceType', '--')]} - {_.get(ele,'candidate.name', '--')}</option>
-                                })
+                                studies
+                                .filter(ele => ele.serviceType !== undefined && ele.candidate) // Filtra los vacíos
+                                .map(ele => (
+                                    <option key={ele.id} value={ele.id}>
+                                        {serviceType[ele.serviceType] || "Desconocido"} - {`${_.get(ele, 'candidate.name', 'Sin nombre')} ${_.get(ele, 'candidate.lastname', 'Sin apellido')}`.trim()}
+                                    </option>
+                                ))
                             }
                         </select >
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"nameClient"}>Nombre del cliente*</label>
-                        <label htmlFor={"nameClient"} className='labelFormInput'>{studySelected ? studySelected.candidate.client.name : ''}</label>
+                        <label htmlFor={"nameClient"} className='labelFormInput'>{studySelected ? `${studySelected.candidate.client.name} ${studySelected.candidate.client.lastname}` : ''}</label>
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"nameCandidate"}>Nombre del candidato*</label>
-                        <label htmlFor={"nameClient"} className='labelFormInput'>{studySelected ? studySelected.candidate.name : ''}</label>
+                        <label htmlFor={"nameClient"} className='labelFormInput'>{studySelected ? `${studySelected.candidate.name} ${studySelected.candidate.lastname}` : ''}</label>
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"nameInterviewer"}>Nombre del entrevistador*</label>
-                        <label htmlFor={"nameClient"} className='labelFormInput'>{_.get(studySelected, 'interviewer.name', '--')}</label>
+                        <label htmlFor={"nameClient"} className='labelFormInput'>{`${_.get(studySelected, 'interviewer.name', '--')} ${_.get(studySelected, 'interviewer.lastname', '--')}`}</label>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"form-item-column"}>

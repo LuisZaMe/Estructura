@@ -69,8 +69,12 @@ const ClientView = () => {
                                     className={"value"}>{client ? client.companyInformation.companyPhone : ""}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Nombre responsable</label>
+                                <label className={"property"}>Nombre(s) responsable</label>
                                 <label className={"value"}>{client ? client.name : null}</label>
+                            </div>
+                            <div className={"client-section-item"}>
+                                <label className={"property"}>Apellidos(s) responsable</label>
+                                <label className={"value"}>{client ? client.lastname : null}</label>
                             </div>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Telefono responsable</label>

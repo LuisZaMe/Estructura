@@ -1,7 +1,7 @@
 class Candidate {
-    constructor(name, phone, email, curp, nss, address, position, state, city, client) {
+    constructor(name,lastname, phone, email, curp, nss, address, position, state, city, client) {
         this.name = name
-        this.lastname = ""
+        this.lastname = lastname
         this.phone = phone
         this.email = email
         this.curp = curp

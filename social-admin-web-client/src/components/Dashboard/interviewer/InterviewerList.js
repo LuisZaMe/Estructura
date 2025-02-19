@@ -94,7 +94,7 @@ const InterviewerList = () => {
     const renderInterviewers = interviewers.map(interviewer => {
         return (
             <div key={interviewer.id} className={"table-row"}>
-                <label className={"table-cell"}>{interviewer.name}</label>
+                <label className={"table-cell"}>{`${interviewer.name} ${interviewer.lastname || ""}`.trim()}</label>
                 <label className={"table-cell"}>{interviewer.phone}</label>
                 <label className={"table-cell"}>{interviewer.email}</label>
                 <ActionDropdown key={`action-${interviewer.id}`} onClickView={onClickView} onClickEdit={onClickEdit}

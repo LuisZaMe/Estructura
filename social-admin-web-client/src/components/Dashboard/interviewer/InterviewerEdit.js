@@ -97,12 +97,33 @@ const InterviewerEdit = () => {
 					<div className={"interviewer-header"}>
 						<div className={"interviewer-name"}>
 							<label className={"interviewer-name-title"}>Nombre del entrevistador</label>
-							<input className={"interviewer-section-input"} type={"text"}
-								value={interviewer ? interviewer.name : ""}
-								onChange={event => setInterviewer({
-									...interviewer,
-									name: event.target.value
-								})} />
+							<input
+								className={"interviewer-section-input"}
+								type={"text"}
+								value={`${interviewer?.name || ""} ${interviewer?.lastname || ""}`.trim()}
+								onChange={event => {
+									const words = event.target.value.trim().split(" ");
+
+									let newName, newLastname;
+
+									if (words.length >= 4) {
+										newName = words.slice(0, words.length - 2).join(" ");
+										newLastname = words.slice(-2).join(" ");
+									} else if (words.length === 3) {
+										newName = words[0];
+										newLastname = words.slice(1).join(" ");
+									} else {
+										newName = words.slice(0, words.length - 1).join(" ");
+										newLastname = words.length > 1 ? words[words.length - 1] : "";
+									}
+									setInterviewer({
+										...interviewer,
+										name: newName || event.target.value,
+										lastname: newLastname
+									});
+								}}
+							/>
+
 						</div>
 						<button className={"edit-interviewer"} onClick={onClickView}>
 							<img src={"/images/actions-dropdown/edit.svg"} alt={""} />

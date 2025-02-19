@@ -42,14 +42,38 @@ const AdminEdit = () => {
             <div className={"content admin"}>
                 <div className={"top-section"}>
                     <div className={"admin-header"}>
-                        <div className={"admin-name"}>
-                            <label className={"admin-name-title"}>Nombre del administrador</label>
-                            <input className={"admin-section-input"} type={"text"} value={admin ? admin.name : ""}
-                                   onChange={event => setAdmin({
-                                       ...admin,
-                                       name: event.target.value
-                                   })}/>
-                        </div>
+                    <div className={"admin-name"}>
+    <label className={"admin-name-title"}>Nombre del administrador</label>
+    <input
+        className={"admin-section-input"}
+        type={"text"}
+        value={`${admin?.name || ""} ${admin?.lastname || ""}`.trim()}
+        onChange={event => {
+            const words = event.target.value.trim().split(" ");
+
+            let newName, newLastname;
+
+            if (words.length >= 4) {
+                newName = words.slice(0, words.length - 2).join(" ");
+                newLastname = words.slice(-2).join(" ");
+            } else if (words.length === 3) {
+                newName = words[0];
+                newLastname = words.slice(1).join(" ");
+            } else {
+                newName = words.slice(0, words.length - 1).join(" ");
+                newLastname = words.length > 1 ? words[words.length - 1] : "";
+            }
+
+            setAdmin({
+                ...admin,
+                name: newName || event.target.value,
+                lastname: newLastname
+            });
+        }}
+    />
+</div>
+
+
                         <button className={"edit-admin"} onClick={onClickView}>
                             <img src={"/images/actions-dropdown/edit.svg"} alt={""}/>
                             Editar

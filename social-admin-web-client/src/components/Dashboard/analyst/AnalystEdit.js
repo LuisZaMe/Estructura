@@ -44,14 +44,35 @@ const AnalystEdit = () => {
                     <div className={"analyst-header"}>
                         <div className={"analyst-name"}>
                             <label className={"analyst-name-title"}>Nombre del analista</label>
-                            <input className={"analyst-section-input"} type={"text"} value={analyst ? analyst.name : ""}
-                                   onChange={event => setAnalyst({
-                                       ...analyst,
-                                       name: event.target.value
-                                   })}/>
+                            <input
+                                className={"analyst-section-input"}
+                                type={"text"}
+                                value={`${analyst?.name || ""} ${analyst?.lastname || ""}`}
+                                onChange={event => {
+                                    const words = event.target.value.trim().split(" ");
+                                    let newName, newLastname;
+
+                                    if (words.length >= 4) {
+                                        newName = words.slice(0, words.length - 2).join(" ");
+                                        newLastname = words.slice(-2).join(" ");
+                                    } else if (words.length === 3) {
+                                        newName = words[0];
+                                        newLastname = words.slice(1).join(" ");
+                                    } else {
+                                        newName = words.slice(0, words.length - 1).join(" ");
+                                        newLastname = words.length > 1 ? words[words.length - 1] : "";
+                                    }
+                                    setAnalyst({
+                                        ...analyst,
+                                        name: newName || event.target.value,
+                                        lastname: newLastname
+                                    });
+                                }}
+                            />
+
                         </div>
                         <button className={"edit-analyst"} onClick={onClickView}>
-                            <img src={"/images/actions-dropdown/edit.svg"} alt={""}/>
+                            <img src={"/images/actions-dropdown/edit.svg"} alt={""} />
                             Editar
                         </button>
                     </div>

@@ -75,12 +75,21 @@ const ClientEdit = () => {
                                     })}/>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Nombre responsable</label>
+                                <label className={"property"}>Nombre(s) responsable</label>
                                 <input className={"client-section-input"} type={"text"}
                                         value={client ? client.name : ""}
                                         onChange={event => setClient({
                                             ...client,
                                             name: event.target.value
+                                        })}/>
+                            </div>
+                            <div className={"client-section-item"}>
+                                <label className={"property"}>Apellido(s) responsable</label>
+                                <input className={"client-section-input"} type={"text"}
+                                        value={client ? client.lastname : ""}
+                                        onChange={event => setClient({
+                                            ...client,
+                                            lastname: event.target.value
                                         })}/>
                             </div>
                             <div className={"client-section-item"}>

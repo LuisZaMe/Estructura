@@ -41,6 +41,7 @@ const VisitList = (props) => {
     const visit = useSelector(state => state)
 
     const [visits, setVisits] = useState([])
+    const [filteredVisits, setFilteredVisits] = useState([]);
     const [visitToEdit, setVisitToEdit] = useState(null)
     const [view, setView] = useState('table')
     const [searchTerm, setSearchTerm] = useState("")
@@ -66,8 +67,8 @@ const VisitList = (props) => {
     const getVisits = async () => {
         setIsLoading(true);
         try {
-            const response = await VisitService.getVisit(searchTerm, page)
-            setVisits(response.data.response)
+            const response = await VisitService.getVisit("", page)
+            setVisits(response.data.response);
             setIsLoading(false);
         } catch (error) {
             console.log(error)
@@ -85,9 +86,25 @@ const VisitList = (props) => {
     }
 
     useEffect(() => {
+        const filtered = visits.filter(visit => {
+            return (
+                _.get(visit, 'study.candidate.client.companyInformation.companyName', '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                _.get(visit, 'study.candidate.name', '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                _.get(visit, 'study.candidate.lastname', '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                _.get(visit, 'study.interviewer.name', '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                moment.utc(_.get(visit, 'visitDate', '')).local().format("DD/MM/YYYY").includes(searchTerm) ||
+                _.get(visit, 'state.name', '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                _.get(visit, 'city.name', '').toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        });
+        
+        setFilteredVisits(filtered);
+    }, [searchTerm, visits]);
+
+    useEffect(() => {
         getVisits()
         getPages()
-    }, [page, visit, searchTerm])
+    }, [page, visit]) // Elimina searchTerm de las dependencias
 
     const handleDelete = () => {
         try {
@@ -122,19 +139,19 @@ const VisitList = (props) => {
         )
     })
 
-    const renderAdmins = visits.map(visit => {
+    const renderAdmins = filteredVisits.map(visit => {
         return (
             <div key={visit.id} className={"table-row"}>
                 <label className={"table-cell"}>{visit.id}</label>
                 <label className={"table-cell"}>{_.get(visit, 'study.candidate.client.companyInformation.companyName', '')}</label>
-                <label className={"table-cell"}>{_.get(visit, 'study.candidate.name', '')}</label>
-                <label className={"table-cell"}>{_.get(visit, 'study.interviewer.name', '')}</label>
+                <label className={"table-cell"}>{`${_.get(visit, 'study.candidate.name', '')} ${_.get(visit, 'study.candidate.lastname', '')}`.trim()}</label>
+                <label className={"table-cell"}>{`${_.get(visit, 'study.interviewer.name', '')} ${_.get(visit, 'study.interviewer.lastname', '')}`.trim()}</label>
                 <label className={"table-cell"}>{moment.utc(_.get(visit, 'visitDate', '')).local().format("DD/MM/YYYY")}</label>
                 <label className={"table-cell"}>{moment.utc(_.get(visit, 'visitDate', '')).local().format("HH:mm")}</label>
                 <label className={"table-cell"}>{_.get(visit, 'state.name', '')}</label>
                 <label className={"table-cell"}>{_.get(visit, 'city.name', '')}</label>
                 <label className={"table-cell"}>{_.get(visit, 'study.serviceType', 1) === 1 ? "Estudio Socioeconómico" : "Estudio Laboral" }</label>
-                <label className={"table-cell"}>{_.get(visit, 'study.interviewer.name', '')}</label>
+                <label className={"table-cell"}>{_.get(visit, 'study.interviewer.name', '')} {_.get(visit, 'study.interviewer.lastname', '')}</label>
                 <ActionDropdown key={`action-${visit.id}`} onClickView={onClickView} onClickEdit={onClickEdit}
                 onClickDelete={onClickDelete} userId={visit.id} />
             </div>
