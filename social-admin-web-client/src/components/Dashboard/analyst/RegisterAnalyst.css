@@ -19,13 +19,13 @@
 }
 
 /* Contenedor principal del formulario */
-.form-register-candidate {
+.form-register-analyst {
     position: fixed;
     background: white;
     width: 90%;
     max-width: 600px;
     height: 60vh;
-    top: 45%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px;
@@ -160,7 +160,7 @@ h2 {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .form-register-candidate {
+    .form-register-analyst {
         width: 95%;
         padding: 20px;
     }
@@ -169,6 +169,7 @@ h2 {
         font-size: 20px;
     }
 }
+
 /* Mensaje de procesamiento */
 .processing-message {
     padding: 12px 20px;

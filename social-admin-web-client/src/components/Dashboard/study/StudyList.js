@@ -81,7 +81,7 @@ const StudyList = () => {
 
             return (
                 <div key={study.id} className="table-row">
-                    <label className="table-cell">{study?.id ?? "---"}</label>
+                    {/* <label className="table-cell">{study?.id ?? "---"}</label> */}
                     <label className="table-cell">
                         {`${study?.candidate?.name ?? ""} ${study?.candidate?.lastname ?? ""}`.trim()}
                     </label>
@@ -137,7 +137,7 @@ const StudyList = () => {
                     </div>
                     <div className="table studies">
                         <div className="table-row">
-                            <label className="table-cell-header">Id</label>
+                            {/* <label className="table-cell-header">Id</label> */}
                             <label className="table-cell-header">Candidato</label>
                             <label className="table-cell-header">Puesto</label>
                             <label className="table-cell-header">Empresa</label>

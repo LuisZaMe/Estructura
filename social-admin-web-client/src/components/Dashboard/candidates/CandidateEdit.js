@@ -33,7 +33,6 @@ const CandidateEdit = () => {
         }
     }
 
-
     useEffect(() => {
     }, [candidate])
     
@@ -59,20 +58,60 @@ const CandidateEdit = () => {
                 <div className={"main-section candidate shadow"}>
                     <div className={"candidate-view"}>
                         <div>
-                            <div className={"candidate-section-item"}>
-                                <label className={"property"}>Nombre(s) del candidato</label>
-                                <input className={"candidate-section-input"} value={candidate ? candidate.name : ""}
-                                       onChange={event => setCandidate({...candidate, name: event.target.value})}/>
-                            </div>
+                        <div className={"candidate-section-item"}>
+                            <label className={"property"}>Nombre(s)</label>
+                            <input 
+                                className={"candidate-section-input"} 
+                                value={candidate ? candidate.name : ""}
+                                onChange={event => {
+                                    const input = event.target.value;
+                                    const cleanedInput = input.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                                    const validInput = cleanedInput.split(' ').filter(Boolean);
+                                    if (validInput.length <= 2) {
+                                        setCandidate({...candidate, name: cleanedInput});
+                                    }
+                                }}
+                                onBlur={event => {
+                                    const trimmedValue = candidate.name.trim();
+                                    setCandidate({...candidate, name: trimmedValue});
+                                }}
+                                onKeyDown={event => {
+                                    if (event.key === 'Enter') {
+                                        const trimmedValue = candidate.name.trim();
+                                        setCandidate({...candidate, name: trimmedValue});
+                                    }
+                                }}
+                            />
+                        </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Telefono</label>
-                                <input className={"candidate-section-input"} value={candidate ? candidate.phone : ""}
-                                       onChange={event => setCandidate({...candidate, phone: event.target.value})}/>
+                                <input 
+                                    className={"candidate-section-input"} 
+                                    value={candidate ? candidate.phone : ""}
+                                    onChange={event => {
+                                        const input = event.target.value.replace(/\D/g, '');
+                                        if (input.length <= 10) {
+                                            setCandidate({...candidate, phone: input});
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Correo</label>
-                                <input className={"candidate-section-input"} value={candidate ? candidate.email : ""}
-                                    onChange={event => setCandidate({...candidate, email: event.target.value})}/>
+                                <input 
+                                    className={"candidate-section-input"} 
+                                    value={candidate ? candidate.email : ""} 
+                                    onChange={event => setCandidate({...candidate, email: event.target.value})}
+                                    onBlur={event => {
+                                        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
+                                        const doubleDotPattern = /\.{2,}/;
+                                        const input = event.target.value;
+
+                                        if ((!emailPattern.test(input) || doubleDotPattern.test(input)) && input !== '') {
+                                            alert('Por favor, ingresa un correo válido.');
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>CURP</label>
@@ -87,9 +126,28 @@ const CandidateEdit = () => {
                         </div>
                         <div>
                         <div className={"candidate-section-item"}>
-                                <label className={"property"}>Apellido(s) del candidato</label>
-                                <input className={"candidate-section-input"} value={candidate ? candidate.lastname : ""}
-                                       onChange={event => setCandidate({...candidate, lastname: event.target.value})}/>
+                        <label className={"property"}>Apellido(s)</label>
+                            <input 
+                                className={"candidate-section-input"} 
+                                value={candidate ? candidate.lastname : ""}
+                                onChange={event => {
+                                    const input = event.target.value;
+                                    const cleanedInput = input.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                                    const validInput = cleanedInput.split(' ').filter(Boolean);
+                                    if (validInput.length <= 2) {
+                                        setCandidate({...candidate, lastname: cleanedInput});
+                                    }
+                                }}
+                                onBlur={event => {
+                                    const trimmedValue = candidate.lastname.trim();
+                                    setCandidate({...candidate, lastname: trimmedValue});
+                                }}
+                                onKeyDown={event => {
+                                    if (event.key === 'Enter') {
+                                        const trimmedValue = candidate.lastname.trim();
+                                        setCandidate({...candidate, lastname: trimmedValue});
+                                    }
+                                }}/>
                             </div>
                             <div className={"candidate-section-item"}>
                                 <label className={"property"}>Estado</label>

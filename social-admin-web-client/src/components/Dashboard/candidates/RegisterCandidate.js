@@ -17,6 +17,7 @@ import AccountService from "../../../services/AccountService";
 import CandidateService from "../../../services/CandidateService";
 import LocationService from "../../../services/LocationService";
 
+//css
 import "./RegisterCandidate.css"; 
 
 const RegisterCandidate = () => {
@@ -43,9 +44,9 @@ const RegisterCandidate = () => {
     const [states, setStates] = useState([])
     const [cities, setCities] = useState([])
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const timeoutRef = useRef()
 
-    // Cleanup effect
     useEffect(() => {
         return () => {
             if (timeoutRef.current) {
@@ -122,17 +123,17 @@ const RegisterCandidate = () => {
 
     const onSubmit = async (event) => {
         event.preventDefault()
+        if (isSubmitting) return;
+    
+        setIsSubmitting(true);
 
         try {
             const candidate = new Candidate(name, lastname, phone, email, curp, nss, address, position, {id: state}, {id: city}, client)
 
             const response = await CandidateService.create(candidate)
             dispatch(setCandidateId(response.data.response.id))
-
-            // Mostrar mensaje de éxito
             setShowSuccessMessage(true)
             
-            // Programar cierre y navegación
             timeoutRef.current = setTimeout(() => {
                 disableFlagsAndClose()
                 history.push("/dashboard/candidatos/ver")
@@ -140,6 +141,7 @@ const RegisterCandidate = () => {
 
         } catch (error) {
             console.log(error)
+            setIsSubmitting(false)
         }
     }
 
@@ -182,25 +184,72 @@ const RegisterCandidate = () => {
             <div className={"form-register-candidate"}>
                 {showSuccessMessage && (
                     <div className="confirmation-message">
-                        ¡Procesando Candidato!
+                        ¡Cargando Candidato!
                     </div>
                 )}
-                
                 <div className={"close-modal"}>
                     <img src={"/images/icon-close.png"} alt={""} onClick={disableFlagsAndClose}/>
                 </div>
                 <h2>Registro de candidato</h2>
                 <form className={"form-section no-scrollbar"} onSubmit={onSubmit}>
-                    <div className={"form-item"}>
-                        <label htmlFor={"name"}>Nombre(s) del candidato</label>
-                        <input type={"text"} name={"name"} placeholder={"Nombre(s) candidato"} required value={name}
-                               onChange={event => setName(event.target.value)}/>
-                    </div>
-                    <div className={"form-item"}>
-                        <label htmlFor={"lastname"}>Nombre del candidato</label>
-                        <input type={"text"} name={"lastname"} placeholder={"Agregar candidato"} required value={lastname}
-                               onChange={event => setLastname(event.target.value)}/>
-                    </div>
+                <div className={"form-item"}>
+                    <label htmlFor={"name"}>Nombre(s)</label>
+                    <input 
+                        type={"text"}
+                        name={"name"}
+                        placeholder={"Nombre(s) candidato"}
+                        required
+                        value={name}
+                        maxLength={40}
+                        onChange={event => {
+                            const input = event.target.value;
+                            const cleanedInput = input.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                            const validInput = cleanedInput.split(' ').filter(Boolean);
+                            if (validInput.length <= 2) {
+                                setName(cleanedInput);
+                            }
+                        }}
+                        onBlur={event => {
+                            const trimmedValue = name.trim();
+                            setName(trimmedValue);
+                        }}
+                        onKeyDown={event => {
+                            if (event.key === 'Enter') {
+                                const trimmedValue = name.trim();
+                                setName(trimmedValue);
+                            }
+                        }}
+                    />
+                </div>
+                <div className={"form-item"}>
+                    <label htmlFor={"lastname"}>Apellidos(s)</label>
+                    <input 
+                        type={"text"}
+                        name={"lastname"}
+                        placeholder={"Apellidos(s) candidato"}
+                        required
+                        value={lastname}
+                        maxLength={40}
+                        onChange={event => {
+                            const input = event.target.value;
+                            const cleanedInput = input.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                            const validInput = cleanedInput.split(' ').filter(Boolean);
+                            if (validInput.length <= 2) {
+                                setLastname(cleanedInput);
+                            }
+                        }}
+                        onBlur={event => {
+                            const trimmedValue = lastname.trim();
+                            setLastname(trimmedValue);
+                        }}
+                        onKeyDown={event => {
+                            if (event.key === 'Enter') {
+                                const trimmedValue = lastname.trim();
+                                setLastname(trimmedValue);
+                            }
+                        }}
+                    />
+                </div>
                     <div className={"form-item"}>
                         <label htmlFor={"client"}>Nombre del cliente</label>
                         {
@@ -210,19 +259,48 @@ const RegisterCandidate = () => {
                                         selectedOption={client ? client.companyInformation.companyName : null}
                                         onChange={handleClient}
                                         page={page}
-                                        setPage={setPage}
-                                />
+                                        setPage={setPage} />
                         }
                     </div>
                     <div className={"form-item"}>
-                        <label htmlFor={"phone"}>Telefono</label>
-                        <input type={"tel"} name={"phone"} placeholder={"Agregar telefono"} required value={phone}
-                               onChange={event => setPhone(event.target.value)}/>
+                        <label htmlFor={"phone"}>Teléfono</label>
+                        <input 
+                            type={"tel"} 
+                            name={"phone"} 
+                            placeholder={"Agregar teléfono"} 
+                            required 
+                            value={phone}
+                            onChange={event => {
+                                const input = event.target.value;
+                                if (/^\d{0,10}$/.test(input)) {
+                                    setPhone(input);
+                                }
+                            }}
+                            onBlur={event => {
+                                if (phone.length !== 10) {
+                                    alert('El teléfono debe tener 10 dígitos.');
+                                }
+                            }}
+                        />
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"email"}>Correo</label>
-                        <input type={"email"} name={"email"} placeholder={"Agregar correo"} required value={email}
-                               onChange={event => setEmail(event.target.value)}/>
+                        <input 
+                            type={"email"} 
+                            name={"email"} 
+                            placeholder={"Agregar correo"} 
+                            required 
+                            value={email}
+                            onChange={event => setEmail(event.target.value)}
+                            onBlur={event => {
+                                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
+                                const doubleDotPattern = /\.{2,}/;
+                                const input = event.target.value;
+                                if ((!emailPattern.test(input) || doubleDotPattern.test(input)) && input !== '') {
+                                    alert('Por favor, ingresa un correo válido.');
+                                }
+                            }}
+                        />
                     </div>
                     <div className={"form-item"}>
                         <label htmlFor={"curp"}>CURP</label>
@@ -259,7 +337,11 @@ const RegisterCandidate = () => {
                         </select>
                     </div>
                     <div className={"form-action"}>
-                        <button className={"form-button-primary"}>Registrar</button>
+                        {!isSubmitting ? (
+                            <button className={"form-button-primary"}>Registrar</button>
+                        ) : (
+                            <div className="processing-message">Procesando solicitud...</div>
+                        )}
                     </div>
                 </form>
             </div>

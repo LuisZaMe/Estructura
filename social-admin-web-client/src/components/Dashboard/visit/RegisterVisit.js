@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
 import { hideRegisterVisit, setVisitId } from "../../../actions";
-
 
 // Services
 import VisitService from "../../../services/VisitService";
@@ -12,6 +11,10 @@ import LocationService from "../../../services/LocationService";
 import StudyService from "../../../services/StudyService";
 import moment from "moment";
 import _ from 'lodash';
+
+//css
+import "./RegisterVisit.css"; 
+
 export const RegisterVisit = () => {
 
     const dispatch = useDispatch()
@@ -21,7 +24,6 @@ export const RegisterVisit = () => {
     const [visitDate, setVisitDate] = useState("")
     const [visitHour, setVisitHour] = useState("")
     const [dateTime, setDateTime] = useState("")
-
     const [states, setStates] = useState([])
     const [cities, setCities] = useState([])
     const [state, setState] = useState(0)
@@ -32,6 +34,18 @@ export const RegisterVisit = () => {
     const [studySelected, setStudySelected] = useState(null)
     const [appointmentMedium, setAppointmentMedium] = useState(null)
     const [color, setColor] = useState(["FFFFF", ''])
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const timeoutRef = useRef()
+
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current)
+            }
+            setIsSubmitting(false);
+        }
+    }, [])
 
     const serviceType = [
         "None",
@@ -102,7 +116,12 @@ export const RegisterVisit = () => {
         )
     })
 
-    const onSubmit = async () => {
+    const onSubmit = async (event) => {
+        event.preventDefault()
+        if (isSubmitting) return;
+    
+        setIsSubmitting(true);
+        
         try {
             const data = {
                 address: address,
@@ -118,11 +137,16 @@ export const RegisterVisit = () => {
             const response = await VisitService.create(data)
             // dispatch(setAdminId(response.data.response.id))
             if (response) {
-                dispatch(hideRegisterVisit())
-                history.push("/dashboard/visitas")
+                setShowSuccessMessage(true)
+                timeoutRef.current = setTimeout(() => {
+                    dispatch(hideRegisterVisit())
+                    history.push("/dashboard/visitas/ver")
+                    setIsSubmitting(false);
+                }, 3000)
             }
         } catch (error) {
             console.log(error)
+            setIsSubmitting(false)
         }
     }
 
@@ -130,11 +154,16 @@ export const RegisterVisit = () => {
     return (
         <div className={showHideModal}>
             <div className={"form-register-admin"}>
+                {showSuccessMessage && (
+                            <div className="confirmation-message">
+                                ¡Cargando Visita!
+                            </div>
+                        )}
                 <div className={"close-modal"}>
                     <img src={"/images/icon-close.png"} alt={""} onClick={() => dispatch(hideRegisterVisit())} />
                 </div>
                 <h2>Registro de visitas</h2>
-                <form className={"form-section"}>
+                <form className={"form-section"} onSubmit={onSubmit}>
                     <h3 className={"form-subsection-header"}>Datos Principales</h3>
                     <div className={"form-item"}>
                         <label htmlFor={"nameClient"}>Seleccionar servicio*</label>
@@ -146,7 +175,7 @@ export const RegisterVisit = () => {
                             <option className='option-selected' value={0} selected hidden> {"Seleccionar estudio"}</option>
                             {
                                 studies
-                                .filter(ele => ele.serviceType !== undefined && ele.candidate) // Filtra los vacíos
+                                .filter(ele => ele.serviceType !== undefined && ele.candidate)
                                 .map(ele => (
                                     <option key={ele.id} value={ele.id}>
                                         {serviceType[ele.serviceType] || "Desconocido"} - {`${_.get(ele, 'candidate.name', 'Sin nombre')} ${_.get(ele, 'candidate.lastname', 'Sin apellido')}`.trim()}
@@ -213,7 +242,11 @@ export const RegisterVisit = () => {
                     </div>
 
                     <div className={"form-action"}>
-                        <button  className={"form-button-primary"} onClick={onSubmit} >Registrar</button>
+                        {!isSubmitting ? (
+                            <button  className={"form-button-primary"} onClick={onSubmit} >Registrar</button>
+                            ) : (
+                                <div className="processing-message">Procesando solicitud...</div>
+                            )}
                     </div>
                 </form>
             </div>

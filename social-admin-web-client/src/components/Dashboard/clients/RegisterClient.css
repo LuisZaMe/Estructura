@@ -18,8 +18,19 @@
     display: none;
 }
 
+.client-section-item .value {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-width: 100%;
+    line-height: 1.5em; /* Ajusta según tu diseño */
+    height: 3em; /* 2 líneas * line-height */
+}
+
 /* Contenedor principal del formulario */
-.form-register-candidate {
+.form-register-client {
     position: fixed;
     background: white;
     width: 90%;
@@ -160,7 +171,7 @@ h2 {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .form-register-candidate {
+    .form-register-client {
         width: 95%;
         padding: 20px;
     }
@@ -169,6 +180,7 @@ h2 {
         font-size: 20px;
     }
 }
+
 /* Mensaje de procesamiento */
 .processing-message {
     padding: 12px 20px;

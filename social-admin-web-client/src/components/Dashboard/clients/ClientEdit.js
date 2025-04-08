@@ -64,51 +64,129 @@ const ClientEdit = () => {
                             <label className={"client-section-title"}>Datos principales</label>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Telefono empresa</label>
-                                <input className={"client-section-input"} type={"tel"}
-                                        value={client ? client.companyInformation.companyPhone : ""}
-                                        onChange={event => setClient({
-                                        ...client,
-                                        companyInformation: {
-                                            ...client.companyInformation,
-                                            companyPhone: event.target.value
-                                        } 
-                                    })}/>
+                                <input
+                                    className={"client-section-input"}
+                                    type={"tel"}
+                                    value={client ? client.companyInformation.companyPhone : ""}
+                                    maxLength={10}
+                                    onChange={event => {
+                                        const input = event.target.value.replace(/\D/g, '');
+                                        setClient(prevClient => ({
+                                            ...prevClient,
+                                            companyInformation: {
+                                                ...prevClient.companyInformation,
+                                                companyPhone: input
+                                            }
+                                        }));
+                                    }}
+                                />
                             </div>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Nombre(s) responsable</label>
-                                <input className={"client-section-input"} type={"text"}
-                                        value={client ? client.name : ""}
-                                        onChange={event => setClient({
+                                <input
+                                    className={"client-section-input"}
+                                    type={"text"}
+                                    value={client ? client.name : ""}
+                                    onChange={event => {
+                                        const input = event.target.value;
+                                        const cleanedInput = input.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                                        const validInput = cleanedInput.split(' ').filter(Boolean);
+                                        if (validInput.length <= 2) {
+                                            setClient({
+                                                ...client,
+                                                name: cleanedInput
+                                            });
+                                        }
+                                    }}
+                                    onBlur={event => {
+                                        const trimmedValue = client.name.trim();
+                                        setClient({
                                             ...client,
-                                            name: event.target.value
-                                        })}/>
+                                            name: trimmedValue
+                                        });
+                                    }}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter') {
+                                            const trimmedValue = client.name.trim();
+                                            setClient({
+                                                ...client,
+                                                name: trimmedValue
+                                            });
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Apellido(s) responsable</label>
-                                <input className={"client-section-input"} type={"text"}
-                                        value={client ? client.lastname : ""}
-                                        onChange={event => setClient({
+                                <input
+                                    className={"client-section-input"}
+                                    type={"text"}
+                                    value={client ? client.lastname : ""}
+                                    onChange={event => {
+                                        const input = event.target.value;
+                                        const cleanedInput = input.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                                        const validInput = cleanedInput.split(' ').filter(Boolean);
+                                        setClient({
                                             ...client,
-                                            lastname: event.target.value
-                                        })}/>
+                                            lastname: cleanedInput
+                                        });
+                                    }}
+                                    onBlur={event => {
+                                        const trimmedValue = client.lastname.trim();
+                                        setClient({
+                                            ...client,
+                                            lastname: trimmedValue
+                                        });
+                                    }}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter') {
+                                            const trimmedValue = client.lastname.trim();
+                                            setClient({
+                                                ...client,
+                                                lastname: trimmedValue
+                                            });
+                                        }
+                                    }}
+                                />
                             </div>
+
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Telefono responsable</label>
-                                <input className={"client-section-input"} type={"text"}
+                                <input
+                                    className={"client-section-input"}
+                                    type={"text"}
                                     value={client ? client.phone : ""}
-                                    onChange={event => setClient({
-                                        ...client,
-                                        phone: event.target.value
-                                    })}/>
+                                    maxLength={10}
+                                    onChange={event => {
+                                        const input = event.target.value.replace(/\D/g, '');
+                                        if (input.length <= 10) {
+                                            setClient({
+                                                ...client,
+                                                phone: input
+                                            });
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Correo</label>
-                                <input className={"client-section-input"} type={"email"}
-                                        value={client ? client.email : ""}
-                                        onChange={event => setClient({
+                                <input
+                                    className={"client-section-input"}
+                                    type={"email"}
+                                    value={client ? client.email : ""}
+                                    onChange={event => setClient({
                                         ...client,
                                         email: event.target.value
-                                    })}/>
+                                    })}
+                                    onBlur={event => {
+                                        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
+                                        const doubleDotPattern = /\.{2,}/; 
+                                        const input = event.target.value;
+                                        if ((!emailPattern.test(input) || doubleDotPattern.test(input)) && input !== '') {
+                                            alert('Por favor, ingresa un correo válido.');
+                                        }
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className={"client-tax-info"}>
@@ -152,16 +230,33 @@ const ClientEdit = () => {
                             </div>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Regimen fiscal</label>
-                                <input className={"client-section-input"} type={"text"}
-                                        value={client ? client.companyInformation.regimenFiscal : ""} 
-                                        onChange={event => setClient({
+                                <select
+                                    className={"client-section-input"}
+                                    value={client ? client.companyInformation.regimenFiscal : 0}
+                                    onChange={event => setClient({
                                         ...client,
                                         companyInformation: {
                                             ...client.companyInformation,
                                             regimenFiscal: event.target.value
-                                            } 
-                                        })}
-                                    />
+                                        }
+                                    })}>
+                                    <option value={0}>Seleccionar</option> 
+                                    <option value={1}>Régimen General de Ley</option>
+                                    <option value={2}>Régimen de Personas Morales con Fines no Lucrativos</option>
+                                    <option value={3}>Régimen de Incorporación Fiscal (RIF)</option>
+                                    <option value={4}>Régimen de Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</option>
+                                    <option value={5}>Régimen de Coordinados</option>
+                                    <option value={6}>Régimen de Empresas en Liquidación</option>
+                                    <option value={7}>Régimen de Pequeños Contribuyentes (REPECO)</option>
+                                    <option value={8}>Régimen de Arrendamiento</option>
+                                    <option value={9}>Régimen de Distribuidores de Energía</option>
+                                    <option value={10}>Régimen de Servicios Profesionales</option>
+                                    <option value={11}>Régimen de Cooperativas</option>
+                                    <option value={12}>Régimen de Actividades Empresariales con Ingresos Menores a 2 millones de pesos</option>
+                                    <option value={13}>Régimen de Honorarios Profesionales</option>
+                                    <option value={14}>Régimen de Empresas Familiares</option>
+                                    <option value={15}>Régimen de Sociedad de Inversión de Capitales</option>
+                                </select>
                             </div>
                             <div className={"client-section-item"}>
                                 <label className={"property"}>Metodo de pago</label>

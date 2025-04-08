@@ -21,12 +21,12 @@ import Account from "../../../model/Account";
 // Services
 import AccountService from "../../../services/AccountService";
 
+
+
 const ClientList = () => {
     const dispatch = useDispatch()
     const history = useHistory()
-
     const client = useSelector(state => state.client)
-
     const [clients, setClients] = useState([])
     const [filteredClients, setFilteredClients] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
@@ -34,6 +34,24 @@ const ClientList = () => {
     const [pages, setPages] = useState(0)
     const [showDeleteClient, setShowDeleteClient] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const taxRegimes = [
+        "Seleccionar",
+        "Régimen General de Ley",
+        "Régimen de Personas Morales con Fines no Lucrativos",
+        "Régimen de Incorporación Fiscal (RIF)",
+        "Régimen de Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras",
+        "Régimen de Coordinados",
+        "Régimen de Empresas en Liquidación",
+        "Régimen de Pequeños Contribuyentes (REPECO)",
+        "Régimen de Arrendamiento",
+        "Régimen de Distribuidores de Energía",
+        "Régimen de Servicios Profesionales",
+        "Régimen de Cooperativas",
+        "Régimen de Actividades Empresariales con Ingresos Menores a 2 millones de pesos",
+        "Régimen de Honorarios Profesionales",
+        "Régimen de Empresas Familiares",
+        "Régimen de Sociedad de Inversión de Capitales"
+    ];      
 
     const getClients = async () => {
         setIsLoading(true);
@@ -101,7 +119,7 @@ const ClientList = () => {
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.razonSocial : ""}</label>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.rfc : ""}</label>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.direccionFiscal : ""}</label>
-                <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.regimenFiscal : ""}</label>
+                <label className={"table-cell"}>{client && client.companyInformation && client.companyInformation.regimenFiscal !== null ? taxRegimes[client.companyInformation.regimenFiscal] : "No definido"}</label>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.payment.description : ""}</label>
                 <label className={"table-cell"}>{client.companyInformation ? client.companyInformation.totalStudies : ""}</label>
                 <label className={"table-cell"}>{`${client.companyInformation ? client.companyInformation.completedStudies : "0"} de ${client.companyInformation ? client.companyInformation.totalStudies : "0"}`}</label>
