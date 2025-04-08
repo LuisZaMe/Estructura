@@ -9,7 +9,6 @@ const Session = () => {
     const history = useHistory()
 
     useEffect(() => {
-        // Listener to catch click outside component and close dropdown
         const onBodyClick = (event) => {
             if (ref.current.contains(event.target)) {
                 return
@@ -18,7 +17,6 @@ const Session = () => {
         }
         document.body.addEventListener("click", onBodyClick)
 
-        // Get user data
         setUser(AuthService.getUser().identity)
 
         return () => {

@@ -20,6 +20,7 @@ const AnalystAssignedStudyList = () => {
     const study = useSelector(state => state.study)
 
     const [studies, setStudies] = useState([])
+    const [filteredStudies, setFilteredStudies] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
     const [page, setPage] = useState(0)
     const [pages, setPages] = useState(0)
@@ -38,6 +39,7 @@ const AnalystAssignedStudyList = () => {
                 3,
                 identity.id);
             setStudies(response.data.response)
+            setFilteredStudies(response.data.response);
             setIsLoading(false)
         } catch (error) {
             console.log(error)
@@ -70,20 +72,20 @@ const AnalystAssignedStudyList = () => {
         history.push("/dashboard/validaciones/ver")
     }
 
-    const renderActions = studies.map(study => {
+    const renderActions = filteredStudies.map(study => {
         return (
             <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
         )
     })
 
-    const renderStudies = studies.map(study => {
+    const renderStudies = filteredStudies.map(study => {
         return (
             <div key={study.id} className={"table-row"}>
-                <label className={"table-cell"}>{study.candidate.name}</label>
+                <label className={"table-cell"}>{`${study.candidate.name} ${study.candidate.lastname || ""}`.trim()}</label>
                 <label className={"table-cell"}>{study.candidate.position}</label>
                 <label className={"table-cell"}>{study.candidate.client.companyInformation ? study.candidate.client.companyInformation.companyName : "-"}</label>
-                <label className={"table-cell"}>{study.analyst ? study.analyst.name : "-"}</label>
-                <label className={"table-cell"}>{study.interviewer ? study.interviewer.name : "-"}</label>
+                <label className={"table-cell"}>{study.analyst ? `${study.analyst.name} ${study.analyst.lastname || ""}`.trim() : "-"}</label>
+                <label className={"table-cell"}>{study.interviewer ? `${study.interviewer.name} ${study.interviewer.lastname || ""}`.trim() : "-"}</label>
                 <label className={"table-cell"}>{study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral"}</label>
                 <label className={"table-cell"}>{getDate(study.createdAt)}</label>
                 <label className={"table-cell"}>{getDate(study.updatedAt)}</label>
@@ -92,6 +94,23 @@ const AnalystAssignedStudyList = () => {
         )
     })
 
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+
+
+        const filtered = studies.filter(study => {
+
+            return (
+                study.candidate.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
+                study.candidate.position.toLowerCase().includes(event.target.value.toLowerCase()) ||
+                (study.candidate.client.companyInformation ? study.candidate.client.companyInformation.companyName.toLowerCase().includes(event.target.value.toLowerCase()) : false) ||
+                (study.analyst ? study.analyst.name.toLowerCase().includes(event.target.value.toLowerCase()) : false)
+            );
+        });
+
+        setFilteredStudies(filtered);
+    }
+
     return (
         <div className={"container"}>
             <div className={"content studies"}>
@@ -99,7 +118,7 @@ const AnalystAssignedStudyList = () => {
                     <div className={"studies-list-top"}>
                         <div className={"search-form"}>
                             <input className={"search-field"} type={"search"} placeholder={"Buscar..."}
-                                value={searchTerm} onChange={event => setSearchTerm(event.target.value)} />
+                                value={searchTerm} onChange={handleSearch} />  {/* Usar handleSearch */}
                             <button className={"search-button"}>
                                 <img src={"/images/search.png"} alt={""} />
                             </button>
@@ -123,12 +142,9 @@ const AnalystAssignedStudyList = () => {
                         </div>
                         {renderStudies}
                     </div>
-                    {/* <div className={"table-actions"}>
-                        {renderActions}
-                    </div> */}
                 </div>
                 <div className={"pagination"}>
-                    <Pagination page={page} setPage={setPage} pages={pages} isLoading={isLoading}/>
+                    <Pagination page={page} setPage={setPage} pages={pages} isLoading={isLoading} />
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@ namespace Estructura.API.Controllers
         [HttpGet("")]
         [Authorize(Policy = Core.Policies.Policies.InternoGlobal)]
         public async Task<ActionResult<GenericResponse<List<Candidate>>>> GetCandidate([FromQuery] List<long> Id, int currentPage, int offset)
-        {
+       {
             return await GetActionResult(_candidate.GetCandidate(Id,currentPage,offset));
         }
 

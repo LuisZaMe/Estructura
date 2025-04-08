@@ -19,15 +19,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { purple } from '@mui/material/colors';
 
 const ClientStudyList = () => {
-    const dispatch = useDispatch()
-    const history = useHistory()
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    const study = useSelector(state => state.study)
+    const study = useSelector(state => state.study);
 
-    const [studies, setStudies] = useState([])
-    const [searchTerm, setSearchTerm] = useState("")
-    const [page, setPage] = useState(0)
-    const [pages, setPages] = useState(0)
+    const [studies, setStudies] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState(0);
+    const [pages, setPages] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
     const getStudies = async () => {
@@ -35,67 +35,90 @@ const ClientStudyList = () => {
         try {
             var identity = AuthService.getIdentity();
             const response = await StudyService.getStudies(page, 1, identity.id, 2, 1, 1, 4, 7);
-            // const response = await StudyService.getStudies(page, 0, 0, 0, 12, 0);
-            setStudies(response.data.response)
+            setStudies(response.data.response);
             setIsLoading(false);
         } catch (error) {
-            console.log(error)
+            console.log(error);
             setIsLoading(false);
         }
-    }
+    };
 
     const getPages = async () => {
         try {
             var identity = AuthService.getIdentity();
             const response = await StudyService.getPages(0, 0, 0, identity.id, 0, 4, 7);
-            setPages(response.data.response)
+            setPages(response.data.response);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     useEffect(() => {
-        getStudies()
-        getPages()
-    }, [page, study])
+        getStudies();
+        getPages();
+    }, [page, study]);
 
     const getDate = (value) => {
-        const date = new Date(value)
-        return date.toLocaleDateString()
-    }
+        const date = new Date(value);
+        return date.toLocaleDateString();
+    };
 
     const onClickView = (id) => {
-        dispatch(setStudyId(id))
-        history.push("/dashboard/validaciones/ver")
-    }
+        dispatch(setStudyId(id));
+        history.push("/dashboard/validaciones/ver");
+    };
 
-    const renderActions = studies.map(study => {
+    const renderActions = studies.map((study) => {
         return (
             <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
-        )
-    })
+        );
+    });
 
-    const renderStudies = studies.map(study => {
-        const progress = study.studyStatus == 3 || study.studyStatus == 2 ? 100 : study.studyStatus == 1 ? 25 : 50;
-        const color = study.studyStatus == 2 ? 'error' : study.studyStatus == 3 ? 'success' : 'info';
+    const filteredStudies = studies.filter(study => {
+        const searchLower = searchTerm.toLowerCase();
+        const candidateName = study.candidate ? study.candidate.name.toLowerCase() : '';
+        const position = study.candidate ? study.candidate.position.toLowerCase() : '';
+        const companyName = study.candidate && study.candidate.client && study.candidate.client.companyInformation 
+                            ? study.candidate.client.companyInformation.companyName.toLowerCase() : '';
+        const analystName = study.analyst ? study.analyst.name.toLowerCase() : '';
+        const interviewerName = study.interviewer ? study.interviewer.name.toLowerCase() : '';
+        const serviceType = study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral";
+
+        return (
+            candidateName.includes(searchLower) ||
+            position.includes(searchLower) ||
+            companyName.includes(searchLower) ||
+            analystName.includes(searchLower) ||
+            interviewerName.includes(searchLower) ||
+            serviceType.toLowerCase().includes(searchLower)
+        );
+    });
+
+    const renderStudies = filteredStudies.map((study) => {
+        const progress = study.studyStatus === 3 || study.studyStatus === 2 ? 100 : study.studyStatus === 1 ? 25 : 50;
+        const color = study.studyStatus === 2 ? 'error' : study.studyStatus === 3 ? 'success' : 'info';
         return (
             <div key={study.id} className={"table-row"}>
-                <label className={"table-cell"}>{study.candidate ? study.candidate.name : "-"}</label>
+                <label className={"table-cell"}>{study.candidate ? `${study.candidate.name} ${study.candidate.lastName}` : "-"}</label>
                 <label className={"table-cell"}>{study.candidate ? study.candidate.position : "-"}</label>
                 <label className={"table-cell"}>{study.candidate ? study.candidate.client.companyInformation.companyName : "-"}</label>
-                <label className={"table-cell"}>{study.analyst ? study.analyst.name : "-"}</label>
-                <label className={"table-cell"}>{study.interviewer ? study.interviewer.name : "-"}</label>
-                <label
-                    className={"table-cell"}>{study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral"}</label>
+                <label className={"table-cell"}>{study.analyst ? `${study.analyst.name} ${study.analyst.lastName}` : "-"}</label>
+                <label className={"table-cell"}>{study.interviewer ? `${study.interviewer.name} ${study.interviewer.lastName}` : "-"}</label>
+                <label className={"table-cell"}>{study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral"}</label>
                 <label className={"table-cell"}>{getDate(study.createdAt)}</label>
                 <label className={"table-cell"}>{getDate(study.updatedAt)}</label>
                 <label className={"table-cell"}>
-                    <LinearProgress style={{height: 5, width: '80%', marginTop: '8%', marginLeft: '10%'}} variant="determinate" value={progress} color={color} />
+                    <LinearProgress
+                        style={{ height: 5, width: '80%', marginTop: '8%', marginLeft: '10%' }}
+                        variant="determinate"
+                        value={progress}
+                        color={color}
+                    />
                 </label>
                 <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
             </div>
-        )
-    })
+        );
+    });
 
     return (
         <div className={"container"}>
@@ -103,8 +126,13 @@ const ClientStudyList = () => {
                 <div className={"main-section studies-list shadow"}>
                     <div className={"studies-list-top"}>
                         <div className={"search-form"}>
-                            <input className={"search-field"} type={"search"} placeholder={"Buscar..."}
-                                value={searchTerm} onChange={event => setSearchTerm(event.target.value)} />
+                            <input
+                                className={"search-field"}
+                                type={"search"}
+                                placeholder={"Buscar..."}
+                                value={searchTerm}
+                                onChange={(event) => setSearchTerm(event.target.value)}
+                            />
                             <button className={"search-button"}>
                                 <img src={"/images/search.png"} alt={""} />
                             </button>
@@ -130,16 +158,13 @@ const ClientStudyList = () => {
                         </div>
                         {renderStudies}
                     </div>
-                    {/* <div className={"table-actions"}>
-                        {renderActions}
-                    </div> */}
                 </div>
                 <div className={"pagination"}>
                     <Pagination page={page} setPage={setPage} pages={pages} isLoading={isLoading} />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ClientStudyList
+export default ClientStudyList;

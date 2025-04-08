@@ -30,10 +30,10 @@ const InterviewerAssignedStudies = () => {
         try {
             var identity = AuthService.getIdentity();
             const response = await StudyService.getStudies(page, 0, identity.id, 0, 0, 0, 1);
-            setStudies(response.data.response)
+            setStudies(response.data.response);
             setIsLoading(false);
         } catch (error) {
-            console.log(error)
+            console.log(error);
             setIsLoading(false);
         }
     }
@@ -51,39 +51,48 @@ const InterviewerAssignedStudies = () => {
     useEffect(() => {
         getStudies()
         getPages()
-    }, [page, study])
+    }, [page, study]);
 
     const getDate = (value) => {
-        const date = new Date(value)
-        return date.toLocaleDateString()
+        const date = new Date(value);
+        return date.toLocaleDateString();
     }
 
     const onClickView = (id) => {
-        dispatch(setStudyId(id))
-        history.push("/dashboard/validaciones/ver")
+        dispatch(setStudyId(id));
+        history.push("/dashboard/validaciones/ver");
     }
 
-    const renderActions = studies.map(study => {
-        return (
-            <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
-        )
-    })
+    const filteredStudies = studies.filter(study => {
+        const fullNameCandidate = `${study.candidate ? study.candidate.name : ""} ${study.candidate ? study.candidate.lastName : ""}`;
+        const fullNameAnalyst = `${study.analyst ? study.analyst.name : ""} ${study.analyst ? study.analyst.lastName : ""}`;
+        const fullNameInterviewer = `${study.interviewer ? study.interviewer.name : ""} ${study.interviewer ? study.interviewer.lastName : ""}`;
 
-    const renderStudies = studies.map(study => {
+        return (
+            fullNameCandidate.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            study.candidate.position.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            study.candidate.client.companyInformation.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            fullNameAnalyst.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            fullNameInterviewer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral").toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
+
+    const renderStudies = filteredStudies.map(study => {
         return (
             <div key={study.id} className={"table-row"}>
-                <label className={"table-cell"}>{study.candidate.name}</label>
+                <label className={"table-cell"}>{study.candidate.name} {study.candidate.lastname}</label>
                 <label className={"table-cell"}>{study.candidate.position}</label>
                 <label className={"table-cell"}>{study.candidate.client.companyInformation.companyName}</label>
-                <label className={"table-cell"}>{study.analyst ? study.analyst.name : "-"}</label>
-                <label className={"table-cell"}>{study.interviewer ? study.interviewer.name : "-"}</label>
+                <label className={"table-cell"}>{study.analyst ? `${study.analyst.name} ${study.analyst.lastname}` : "-"}</label>
+                <label className={"table-cell"}>{study.interviewer ? `${study.interviewer.name} ${study.interviewer.lastname}` : "-"}</label>
                 <label className={"table-cell"}>{study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral"}</label>
                 <label className={"table-cell"}>{study.studyFinalResult ? getDate(study.studyFinalResult.applicationDate) : "-"}</label>
                 <label className={"table-cell"}>{study.studyFinalResult ? getDate(study.studyFinalResult.visitDate) : "-"}</label>
                 <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
             </div>
-        )
-    })
+        );
+    });
 
     return (
         <div className={"container"}>
@@ -91,8 +100,13 @@ const InterviewerAssignedStudies = () => {
                 <div className={"main-section studies-list shadow"}>
                     <div className={"studies-list-top"}>
                         <div className={"search-form"}>
-                            <input className={"search-field"} type={"search"} placeholder={"Buscar..."}
-                                value={searchTerm} onChange={event => setSearchTerm(event.target.value)} />
+                            <input
+                                className={"search-field"}
+                                type={"search"}
+                                placeholder={"Buscar..."}
+                                value={searchTerm}
+                                onChange={event => setSearchTerm(event.target.value)}
+                            />
                             <button className={"search-button"}>
                                 <img src={"/images/search.png"} alt={""} />
                             </button>
@@ -116,16 +130,13 @@ const InterviewerAssignedStudies = () => {
                         </div>
                         {renderStudies}
                     </div>
-                    {/* <div className={"table-actions"}>
-                        {renderActions}
-                    </div> */}
                 </div>
                 <div className={"pagination"}>
                     <Pagination page={page} setPage={setPage} pages={pages} isLoading={isLoading} />
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default InterviewerAssignedStudies
+export default InterviewerAssignedStudies;

@@ -14,90 +14,114 @@ import StudyService from "../../../services/StudyService";
 import AuthService from "../../../services/AuthService";
 
 const AnalystFinishedStudyList = () => {
-    const dispatch = useDispatch()
-    const history = useHistory()
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    const study = useSelector(state => state.study)
+    const study = useSelector(state => state.study);
 
-    const [studies, setStudies] = useState([])
-    const [searchTerm, setSearchTerm] = useState("")
-    const [page, setPage] = useState(0)
-    const [pages, setPages] = useState(0)
+    const [studies, setStudies] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredStudies, setFilteredStudies] = useState([]);
+    const [page, setPage] = useState(0);
+    const [pages, setPages] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
     const getStudies = async () => {
         setIsLoading(true);
         try {
             var identity = AuthService.getIdentity();
-            const response = await StudyService.getStudies(page,
-                0,
-                0,
-                0,
-                0,
-                0,
-                3,
-                identity.id);
-            setStudies(response.data.response)
+            const response = await StudyService.getStudies(
+                page, 0, 0, 0, 0, 0, 3, identity.id
+            );
+            setStudies(response.data.response);
             setIsLoading(false);
         } catch (error) {
-            console.log(error)
+            console.log(error);
             setIsLoading(false);
         }
-    }
+    };
 
     const getPages = async () => {
         try {
             var identity = AuthService.getIdentity();
             const response = await StudyService.getPages(
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                identity.id)
-            setPages(response.data.response)
+                0, 0, 0, 0, 0, 0, identity.id
+            );
+            setPages(response.data.response);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     useEffect(() => {
-        getStudies()
-        getPages()
-    }, [page, study])
+        getStudies();
+        getPages();
+    }, [page, study]);
+
+    useEffect(() => {
+        if (searchTerm === "") {
+            setFilteredStudies(studies);
+        } else {
+            const filtered = studies.filter(study => {
+                const candidateFullName = `${study.candidate.name} ${study.candidate.lastname || ""}`.toLowerCase();
+                const position = study.candidate.position.toLowerCase();
+                const company = study.candidate.companyInformation ? study.candidate.companyInformation.companyName.toLowerCase() : "";
+                const analyst = study.analyst ? study.analyst.name.toLowerCase() : "";
+                const interviewer = study.interviewer ? study.interviewer.name.toLowerCase() : "";
+                const serviceType = study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral";
+
+                return (
+                    candidateFullName.includes(searchTerm.toLowerCase()) ||
+                    position.includes(searchTerm.toLowerCase()) ||
+                    company.includes(searchTerm.toLowerCase()) ||
+                    analyst.includes(searchTerm.toLowerCase()) ||
+                    interviewer.includes(searchTerm.toLowerCase()) ||
+                    serviceType.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            });
+            setFilteredStudies(filtered);
+        }
+    }, [searchTerm, studies]);
 
     const getDate = (value) => {
-        const date = new Date(value)
-        return date.toLocaleDateString()
-    }
+        const date = new Date(value);
+        return date.toLocaleDateString();
+    };
 
     const onClickView = (id) => {
-        dispatch(setStudyId(id))
-        history.push("/dashboard/validaciones/ver")
-    }
+        dispatch(setStudyId(id));
+        history.push("/dashboard/validaciones/ver");
+    };
 
-    const renderActions = studies.map(study => {
+    const renderActions = filteredStudies.map(study => {
         return (
             <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
-        )
-    })
+        );
+    });
 
-    const renderStudies = studies.map(study => {
+    const renderStudies = filteredStudies.map(study => {
         return (
             <div key={study.id} className={"table-row"}>
-                <label className={"table-cell"}>{study.candidate.name}</label>
+                <label className={"table-cell"}>{study.candidate.name} {study.candidate.lastname}</label>
                 <label className={"table-cell"}>{study.candidate.position}</label>
-                <label className={"table-cell"}>{study.candidate.companyInformation ? study.candidate.companyInformation.companyName : "-"}</label>
-                <label className={"table-cell"}>{study.analyst ? study.analyst.name : "-"}</label>
-                <label className={"table-cell"}>{study.interviewer ? study.interviewer.name : "-"}</label>
-                <label className={"table-cell"}>{study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral"}</label>
+                <label className={"table-cell"}>
+                    {study.candidate.companyInformation ? study.candidate.companyInformation.companyName : "-"}
+                </label>
+                <label className={"table-cell"}>
+                    {study.analyst ? `${study.analyst.name} ${study.analyst.lastname}` : "-"}
+                </label>
+                <label className={"table-cell"}>
+                    {study.interviewer ? `${study.interviewer.name} ${study.interviewer.lastname}` : "-"}
+                </label>
+                <label className={"table-cell"}>
+                    {study.serviceType === 1 ? "Estudio Socioeconómico" : "Estudio Laboral"}
+                </label>
                 <label className={"table-cell"}>{getDate(study.createdAt)}</label>
                 <label className={"table-cell"}>{getDate(study.updatedAt)}</label>
                 <ActionDropdown key={`action-${study.id}`} onClickView={onClickView} studyId={study.id} />
             </div>
-        )
-    })
+        );
+    });
 
     return (
         <div className={"container"}>
@@ -105,8 +129,13 @@ const AnalystFinishedStudyList = () => {
                 <div className={"main-section studies-list shadow"}>
                     <div className={"studies-list-top"}>
                         <div className={"search-form"}>
-                            <input className={"search-field"} type={"search"} placeholder={"Buscar..."}
-                                value={searchTerm} onChange={event => setSearchTerm(event.target.value)} />
+                            <input
+                                className={"search-field"}
+                                type={"search"}
+                                placeholder={"Buscar..."}
+                                value={searchTerm}
+                                onChange={event => setSearchTerm(event.target.value)}
+                            />
                             <button className={"search-button"}>
                                 <img src={"/images/search.png"} alt={""} />
                             </button>
@@ -130,16 +159,13 @@ const AnalystFinishedStudyList = () => {
                         </div>
                         {renderStudies}
                     </div>
-                    {/* <div className={"table-actions"}>
-                        {renderActions}
-                    </div> */}
                 </div>
                 <div className={"pagination"}>
                     <Pagination page={page} setPage={setPage} pages={pages} isLoading={isLoading} />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AnalystFinishedStudyList
+export default AnalystFinishedStudyList;

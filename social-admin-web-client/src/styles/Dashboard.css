@@ -1151,7 +1151,7 @@ h3 {
     color: white;
     font-size: 16px;
     height: 24px;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 .company-name-value,
@@ -1268,7 +1268,7 @@ h3 {
 .interviewer-section-item .property,
 .candidate-section-item .property {
     height: 24px;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 .client-section-item .value,

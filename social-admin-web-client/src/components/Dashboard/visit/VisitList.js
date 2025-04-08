@@ -104,7 +104,7 @@ const VisitList = (props) => {
     useEffect(() => {
         getVisits()
         getPages()
-    }, [page, visit]) // Elimina searchTerm de las dependencias
+    }, [page, visit])
 
     const handleDelete = () => {
         try {
@@ -142,7 +142,7 @@ const VisitList = (props) => {
     const renderAdmins = filteredVisits.map(visit => {
         return (
             <div key={visit.id} className={"table-row"}>
-                <label className={"table-cell"}>{visit.id}</label>
+                {/* <label className={"table-cell"}>{visit.id}</label> */}
                 <label className={"table-cell"}>{_.get(visit, 'study.candidate.client.companyInformation.companyName', '')}</label>
                 <label className={"table-cell"}>{`${_.get(visit, 'study.candidate.name', '')} ${_.get(visit, 'study.candidate.lastname', '')}`.trim()}</label>
                 <label className={"table-cell"}>{`${_.get(visit, 'study.interviewer.name', '')} ${_.get(visit, 'study.interviewer.lastname', '')}`.trim()}</label>
@@ -205,7 +205,7 @@ const VisitList = (props) => {
                         </div>
                         <div className={"table visits"}>
                             <div className={"table-row"}>
-                                <label className={"table-cell-header"}>Id Visita</label>
+                                {/* <label className={"table-cell-header"}>Id Visita</label> */}
                                 <label className={"table-cell-header"}>Empresa/Cliente</label>
                                 <label className={"table-cell-header"}>Candidato</label>
                                 <label className={"table-cell-header"}>Entrevistador</label>

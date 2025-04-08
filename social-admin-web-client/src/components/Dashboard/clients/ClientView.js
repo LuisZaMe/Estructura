@@ -11,6 +11,25 @@ import Candidates from "./Candidates";
 // Services
 import AccountService from "../../../services/AccountService";
 
+const taxRegimes = {
+    0: "Seleccionar",
+    1: "Régimen General de Ley",
+    2: "Régimen de Personas Morales con Fines no Lucrativos",
+    3: "Régimen de Incorporación Fiscal (RIF)",
+    4: "Régimen de Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras",
+    5: "Régimen de Coordinados",
+    6: "Régimen de Empresas en Liquidación",
+    7: "Régimen de Pequeños Contribuyentes (REPECO)",
+    8: "Régimen de Arrendamiento",
+    9: "Régimen de Distribuidores de Energía",
+    10: "Régimen de Servicios Profesionales",
+    11: "Régimen de Cooperativas",
+    12: "Régimen de Actividades Empresariales con Ingresos Menores a 2 millones de pesos",
+    13: "Régimen de Honorarios Profesionales",
+    14: "Régimen de Empresas Familiares",
+    15: "Régimen de Sociedad de Inversión de Capitales"
+};
+
 const ClientView = () => {
     const dispatch = useDispatch()
     const history = useHistory()
@@ -62,33 +81,33 @@ const ClientView = () => {
                 <div className={"main-section client shadow"}>
                     <div className={"client-view no-scrollbar"}>
                         <div className={"client-main-info"}>
-                            <label className={"client-section-title"}>Datos principales</label>
+                            <label className={"client-section-title"}>DATOS PRINCIPALES</label>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Telefono empresa</label>
+                                <label className={"property"}>TELÉFONO EMPRESA</label>
                                 <label
                                     className={"value"}>{client ? client.companyInformation.companyPhone : ""}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Nombre(s) responsable</label>
+                                <label className={"property"}>NOMBRE(S) RESPONSABLE</label>
                                 <label className={"value"}>{client ? client.name : null}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Apellidos(s) responsable</label>
+                                <label className={"property"}>APELLIDO(S) RESPONSABLE</label>
                                 <label className={"value"}>{client ? client.lastname : null}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Telefono responsable</label>
+                                <label className={"property"}>TELÉFONO RESPONSABLE</label>
                                 <label className={"value"}>{client ? client.phone : null}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Correo</label>
+                                <label className={"property"}>CORREO</label>
                                 <label className={"value"}>{client ? client.email : null}</label>
                             </div>
                         </div>
                         <div className={"client-tax-info"}>
-                            <label className={"client-section-title"}>Datos fiscales</label>
+                            <label className={"client-section-title"}>DATOS FISCALES</label>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Razon social</label>
+                                <label className={"property"}>RAZÓN SOCIAL</label>
                                 <label
                                     className={"value"}>{client ? client.companyInformation.razonSocial : null}</label>
                             </div>
@@ -97,17 +116,18 @@ const ClientView = () => {
                                 <label className={"value"}>{client ? client.companyInformation.rfc : null}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Direccion fiscal</label>
+                                <label className={"property"}>DIRECCIÓN FISCAL</label>
                                 <label
                                     className={"value"}>{client ? client.companyInformation.direccionFiscal : null}</label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Regimen fiscal</label>
-                                <label
-                                    className={"value"}>{client ? client.companyInformation.regimenFiscal : null}</label>
+                                <label className={"property"}>RÉGIMEN FISCAL</label>
+                                <label className={"value"}>
+                                    {client ? taxRegimes[client.companyInformation.regimenFiscal] : null}
+                                </label>
                             </div>
                             <div className={"client-section-item"}>
-                                <label className={"property"}>Metodo de pago</label>
+                                <label className={"property"}>MÉTODO DE PAGO</label>
                                 <label
                                     className={"value"}>{client ? client.companyInformation.payment.description : null}</label>
                             </div>
